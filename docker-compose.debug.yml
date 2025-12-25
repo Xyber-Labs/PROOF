@@ -1,0 +1,149 @@
+x-qdrant-config: &qdrant-config
+  # Qdrant connection settings for debugging
+  QDRANT_HOST: qdrant
+  QDRANT_PORT: 6333
+  QDRANT_GRPC_PORT: 6334
+  QDRANT_API_KEY: ""  # No API key needed for local development
+services:
+  search_engine:
+    build:
+      context: ./search_engine
+      dockerfile: Dockerfile
+      target: dev
+    image: search_engine_img_debug
+    container_name: search_engine_cnt_debug
+    #command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5670", "--wait-for-client", "-m", "marketplace", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: ["python", "-m", "search_engine", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+      - "5670:5670"
+    volumes:
+      - ./search_engine/src/search_engine:/app/search_engine:ro
+      - ./xy_market/src/xy_market:/app/xy_market:ro
+    env_file: ./search_engine/.env
+    restart: unless-stopped
+  marketplace:
+    build:
+      context: ./marketplace
+      dockerfile: Dockerfile
+      target: dev
+    image: marketplace_img_debug
+    container_name: marketplace_cnt_debug
+    #command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5671", "--wait-for-client", "-m", "marketplace", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    command: ["python", "-m", "marketplace", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    ports:
+      - "8001:8001"
+      - "5671:5671"
+    volumes:
+      - ./marketplace/src/marketplace:/app/marketplace:ro
+      - ./xy_market/src/xy_market:/app/xy_market:ro
+    env_file: ./marketplace/.env
+    restart: unless-stopped
+  seller_tavily:
+    build:
+      context: ./seller_template
+      dockerfile: Dockerfile
+      target: dev
+    image: seller_img_debug
+    container_name: seller_tavily_debug
+    command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5672", "--wait-for-client", "-m", "seller_template", "--host", "0.0.0.0", "--port", "8002", "--reload"]
+    # command: ["python", "-m", "seller_template", "--host", "0.0.0.0", "--port", "8002", "--reload"]
+    # command: ["tail", "-f", "/dev/null"]
+    ports:
+      - "8002:8002"
+      - "5672:5672"
+    volumes:
+      - ./seller_template/src/seller_template:/app/seller_template:ro
+      - ./xy_market/src/xy_market:/app/xy_market:ro
+      - ../content-core-sdk/content_core_sdk:/app/content_core_sdk:ro
+    env_file: ./seller_template/.env
+    environment:
+      - SELLER_DESCRIPTION="I provide tavily web search retrieval services"
+      #- MCP_SERVERS__TAVILY_WEB_SEARCH__URL=https://dev.ai-mcp-tavily.xyb-dev.com/mcp-server/mcp/
+      - MCP_SERVERS__TAVILY_WEB_SEARCH__URL=http://mcp_server_tavily:8108/mcp-server/mcp/
+    restart: unless-stopped
+
+  mcp_server_tavily:
+    build:
+      context: ../mcp-servers/mcp-server-tavily
+      dockerfile: Dockerfile
+      target: dev
+    image: mcp_server_tavily_debug
+    container_name: mcp_server_tavily_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5675", "--wait-for-client", "-m", "mcp_server_tavily", "--port", "8108", "--reload"]
+    command: ["python", "-m", "mcp_server_tavily", "--port", "8108", "--reload"]
+    ports:
+      - "8108:8108"
+      - "5675:5675"
+    volumes:
+      - ../mcp-servers/mcp-server-tavily/src/mcp_server_tavily:/app/mcp_server_tavily:ro
+    env_file: ../mcp-servers/mcp-server-tavily/.env
+    restart: unless-stopped
+    environment: {}
+  seller_arxiv:
+    build:
+      context: ./seller_template
+      dockerfile: Dockerfile
+      target: dev
+    image: seller_img_debug
+    container_name: seller_arxiv_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5673", "--wait-for-client", "-m", "seller_template", "--host", "0.0.0.0", "--port", "8004", "--reload"]
+    command: ["python", "-m", "seller_template", "--host", "0.0.0.0", "--port", "8004", "--reload"]
+    # command: ["tail", "-f", "/dev/null"]
+    ports:
+      - "8004:8004"
+      - "5673:5673"
+    volumes:
+      - ./seller_template/src/seller_template:/app/seller_template:ro
+      - ./xy_market/src/xy_market:/app/xy_market:ro
+      - ../content-core-sdk/content_core_sdk:/app/content_core_sdk:ro
+    env_file: ./seller_template/.env
+    environment:
+      - SELLER_DESCRIPTION="I provide arXiv article retrieval services"
+      #- MCP_SERVERS__ARXIV_WEB_SEARCH__URL=https://dev.ai-mcp-arxiv.xyb-dev.com/mcp-server/mcp/
+      - MCP_SERVERS__ARXIV__URL=http://mcp_server_arxiv:8100/mcp-server/mcp/
+    restart: unless-stopped
+
+  mcp_server_arxiv:
+    build:
+      context: ../mcp-servers/mcp-server-arxiv
+      dockerfile: Dockerfile
+      target: dev
+    image: mcp_server_arxiv_debug
+    container_name: mcp_server_arxiv_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5676", "--wait-for-client", "-m", "mcp_server_arxiv", "--port", "8101", "--reload"]
+    command: ["python", "-m", "mcp_server_arxiv", "--port", "8101", "--reload"]
+    ports:
+      - "8101:8101"
+      - "5676:5676"
+    volumes:
+      - ../mcp-servers/mcp-server-arxiv/src/mcp_server_arxiv:/app/mcp_server_arxiv:ro
+    env_file: ../mcp-servers/mcp-server-arxiv/.env
+    restart: unless-stopped
+    environment: {}
+  buyer:
+    build:
+      context: ./buyer_example
+      dockerfile: Dockerfile
+      target: dev
+    image: buyer_img_debug
+    container_name: buyer_cnt_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5674", "--wait-for-client", "-m", "buyer_example"]
+    command: ["python", "-m", "buyer_example", "--host", "0.0.0.0", "--port", "8006", "--reload"]
+    ports:
+      - "8006:8006"
+      - "5674:5674"
+    volumes:
+      - ./buyer_example/src/buyer_example:/app/buyer_example:ro
+      - ./xy_market/src/xy_market:/app/xy_market:ro
+    env_file: ./buyer_example/.env
+    restart: unless-stopped
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant_storage
+    ports:
+      - "6333:6333"  # REST API
+      - "6334:6334"  # gRPC
+    environment:
+      <<: [*qdrant-config]
+    restart: unless-stopped

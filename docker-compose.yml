@@ -1,0 +1,23 @@
+services:
+  marketplace:
+    build:
+      context: .
+      dockerfile: marketplace/Dockerfile
+    image: marketplace_img
+    container_name: marketplace_cnt
+    ports:
+      - "8000:8000"
+  seller:
+    build:
+      context: .
+      dockerfile: seller_template/Dockerfile
+    image: seller_img
+    container_name: seller_cnt
+    ports:
+      - "8001:8001"
+  buyer:
+    build:
+      context: .
+      dockerfile: buyer_example/Dockerfile
+    image: buyer_img
+    container_name: buyer_cnt
