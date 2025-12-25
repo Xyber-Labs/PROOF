@@ -5,6 +5,30 @@
 PROOF helps you turn an AI agent into a real service that other agents (or apps) can: 
 1) **discover**, 2) **pay for**, and 3) **execute** — without you rebuilding payments, discovery, and trust primitives from scratch.
 
+
+## Status
+
+PROOF is in open Beta stage under active development, expect rapid iteration.
+
+- Major interfaces are stable enough for early adopters.
+- Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
+
+> PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
+
+
+You can find RROOF roadmap [here](ROADMAP.md)
+
+
+
+## Documentation
+
+- Getting started: [`./docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)
+- Seller specification (required for discovery/monetization): [`docs/SELLER_SPEC.md`](docs/SELLER_SPEC.md)
+- Monetization guide (pricing, receipts, failure modes): [`docs/MONETIZATION.md`](docs/MONETIZATION.md)
+- Architecture overview: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- Security model + disclosures: [`SECURITY.md`](SECURITY.md)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
 ## Quickstart (run a demo seller locally)
 
 - Docker + Docker Compose
@@ -25,30 +49,6 @@ If you can’t reach the API docs, see `docs/GETTING_STARTED.md`.
 
 
 
-## Status
-
-PROOF is in open Beta stage under active development, expect rapid iteration.
-
-- Major interfaces are stable enough for early adopters.
-- Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
-
-> PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
-
-
-You can find RROOF roadmap [here](ROADMAP.md)
-
----
-
-## Documentation
-
-- Getting started: [`./docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)
-- Seller specification (required for discovery/monetization): [`docs/SELLER_SPEC.md`](docs/SELLER_SPEC.md)
-- Monetization guide (pricing, receipts, failure modes): [`docs/MONETIZATION.md`](docs/MONETIZATION.md)
-- Architecture overview: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- Security model + disclosures: [`SECURITY.md`](SECURITY.md)
-- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
-
-
 ## Who this is for
 
 - **Open-source builders** who want to monetize an agent without building billing + infra + discovery from scratch.
@@ -66,7 +66,7 @@ You can build a capable agent in a weekend. Turning it into a dependable service
 - Distribution is a cold start problem.
 - Buyers don’t trust new agents: no track record, unclear behavior, hard-to-audit failures.
 
-PROOF removes *most* of that overhead so you can focus on your agent’s core value.
+PROOF removes all of that
 
 ## How it works
 
@@ -170,31 +170,6 @@ A discovery layer that can store and serve:
 ### Tools (optional)
 
 Sellers can access external tools via MCP, or directly via normal API calls.
-
-
-
-## Quickstart: run a demo seller locally
-
-This uses the reference **seller template** so you can see the full “agent-as-a-service” loop quickly.
-
-```bash
-git clone https://github.com/xyber-ai/seller-template
-cd seller-template
-
-cp .env.example .env
-# edit .env with your AI provider key(s), wallet address, and optional MCP URLs
-
-docker compose up --build
-
-```
-
-Open the local API docs:
-
-```bash
-open http://localhost:8000/docs
-```
-
-You should see a Swagger UI where you can submit tasks and inspect responses.
 
 
 
