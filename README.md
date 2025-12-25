@@ -1,30 +1,3 @@
-# Proof Framework
-
-***Files***
-
-- `buyer-example`
-- `seller-template`
-- `e2e-tests`
-- .`gitignore`
-- `docker-compose.debug.yml`
-- `docker-compose.yml`
-
-- `docs/GETTING_STARTED.md`
-- `docs/SELLER_SPEC.md`
-- `docs/MONETIZATION.md`
-- `docs/ARCHITECTURE.md`
-- `docs/XYBER_ECOSYSTEM.md`
-- `SECURITY.md`
-- `CONTRIBUTING.md`
-- `ROADMAP.md`
-
-- `xyber-smart-contracts`
-- `xyber-mcp-repository`
-- `onchain-memory`
-- `README.md`
-
-
-
 # PROOF
 
 **Open-source framework to ship paid agent services**: discoverable, payment-gated, and optionally verifiable.
@@ -50,7 +23,7 @@ Then open:
 
 If you can’t reach the API docs, see `docs/GETTING_STARTED.md`.
 
----
+
 
 ## Status
 
@@ -60,22 +33,21 @@ PROOF is in open Beta stage under active development, expect rapid iteration.
 - Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
 
 > PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
-> 
 
-You can find RROOF roadmap here 
+
+You can find RROOF roadmap [here](ROADMAP.md)
 
 ---
 
 ## Documentation
 
-- Getting started: `docs/GETTING_STARTED.md`
-- Seller specification (required for discovery/monetization): `docs/SELLER_SPEC.md`
-- Monetization guide (pricing, receipts, failure modes): `docs/MONETIZATION.md`
-- Architecture overview: `docs/ARCHITECTURE.md`
-- Security model + disclosures: `SECURITY.md`
-- Contributing: `CONTRIBUTING.md`
+- Getting started: [`./docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)
+- Seller specification (required for discovery/monetization): [`docs/SELLER_SPEC.md`](docs/SELLER_SPEC.md)
+- Monetization guide (pricing, receipts, failure modes): [`docs/MONETIZATION.md`](docs/MONETIZATION.md)
+- Architecture overview: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- Security model + disclosures: [`SECURITY.md`](SECURITY.md)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
----
 
 ## Who this is for
 
@@ -83,7 +55,6 @@ You can find RROOF roadmap here
 - **Developer platform teams** who want “services with proofs” (auditability, attestations, policy enforcement).
 - **Buyer-agent builders** who want a consistent way to discover and call third-party agent services.
 
----
 
 ## Why PROOF exists
 
@@ -97,23 +68,48 @@ You can build a capable agent in a weekend. Turning it into a dependable service
 
 PROOF removes *most* of that overhead so you can focus on your agent’s core value.
 
----
-
 ## How it works
 
 **PROOF** is built on two layers:
 
 | **Layer** | **What it does** | **Key Components** |
 | --- | --- | --- |
-| **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | -TEE hosting 
--Onchain Memory proofs
--Smart contracts  |
-| **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry
-x402 Payments 
-Broker |
+| **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | TEE hosting <br> Onchain Memory proofs <br> Smart contracts  |
+| **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry <br> x402 Payments <br> Broker |
 - **The Agent Swarms layer** provides a Marketplace where Buyer agents discover and hire Seller agents.
     
-    ![image.png](Proof%20Framework/image.png)
+
+```mermaid
+%%{init: {'theme': 'default'}}%%
+sequenceDiagram
+    autonumber
+
+    participant User
+    participant Broker as Broker (Buyer)
+    participant Marketplace as Marketplace
+    participant YourAgent as Your Agent (Seller)
+    participant MCP as MCP Tools
+
+    User->>Broker: "Find quantum papers"
+
+    rect rgba(200, 220, 255, 0.3)
+        Note over Broker,Marketplace: ERC-8004
+        Broker->>Marketplace: Search sellers
+        Marketplace-->>Broker: Your Agent profile
+    end
+
+    rect rgba(200, 255, 200, 0.3)
+        Note over Broker,YourAgent: x402
+        Broker->>YourAgent: Pay + Execute task
+    end
+
+    YourAgent->>MCP: Use tools
+    MCP-->>YourAgent: Data
+
+    YourAgent-->>Broker: Results
+
+    Broker-->>User: "Here are papers..."
+```
     
 - **The Verifiable Execution layer** ensures that execution artifacts and key actions are cryptographically verifiable:
     - TEE (Trusted Execution Environment) ensures that the agent’s code executes inside a hardware-isolated environment with verifiable attestation of the runtime and code identity.
@@ -125,7 +121,15 @@ Broker |
 > As a user, I need to access the latest papers on quantum error correction.
 > 
 
-![image.png](Proof%20Framework/image%201.png)
+
+| **Step** | **What You See** | **Behind the Scenes** |
+|:---------|:-----------------|:----------------------|
+| **1. Request** | User asks: *"Find papers on quantum error correction"* | Broker agent receives the query |
+| **2. Discovery** | Typing... | Broker queries Marketplace, and finds matching sellers |
+| **3. Match** | "Found ResearchAgent — $0.05/task" | Your agent profile returned |
+| **4. Payment** | User approves, transaction appears onchain | x402 protocol handles crypto payment automatically |
+| **5. Execution** | "Searching papers..." | Your agent calls ArXiv MCP server |
+| **6. Result** | List of papers with summaries | **You earned $0.05** |
 
 **Xyber (optional network & marketplace)**
 
@@ -167,7 +171,7 @@ A discovery layer that can store and serve:
 
 Sellers can access external tools via MCP, or directly via normal API calls.
 
----
+
 
 ## Quickstart: run a demo seller locally
 
@@ -192,7 +196,7 @@ open http://localhost:8000/docs
 
 You should see a Swagger UI where you can submit tasks and inspect responses.
 
----
+
 
 ## Customize your Agent
 
@@ -227,7 +231,7 @@ Add new REST (or MCP) endpoints in the FastAPI router file in the template. Fast
 
 📖 **Important!** If you want to launch your agent on Xyber, make sure it strictly follows the [Seller Specification Document](https://www.notion.so/xyber/agent-swarms/-/blob/refactor/svaha_architecture/docs/SPEC.md)
 
----
+
 
 ## Launch your App
 
@@ -243,9 +247,15 @@ Once your agent runs locally and passes validation:
 
 If you want discovery + automated buying, follow `docs/SELLER_SPEC.md` strictly.
 
----
 
-[Roadmap](Proof%20Framework/Roadmap%202d3e2267718c80349df1f1e0de6ac60e.csv)
+## Roadmap
+
+| Not started | In progress | Done |
+| --- | --- | --- |
+| TEE Hosting | Onchain Memory | x402 Payments |
+
+See full version [here](ROADMAP.md)
+
 
 ## 🤝 Community
 
