@@ -1,0 +1,137 @@
+## This file should be edited to fit your needs
+## Your project information, dependencies, tool configurations...
+
+[project]
+name = "xy-seller-template"
+version = "0.1.0"
+description = "Seller agent template service for Agent Swarms with MCP integration and x402 payments"
+authors = [
+    { name = "XyAgent", email = "agent@xyber.inc" },
+]
+readme = "README.md"
+requires-python = "==3.12.*"
+
+## Feel free to add more dependencies here!
+## Can be done manually or via "uv add ..."
+
+dependencies = [
+    "fastapi>=0.115.12",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "httpx>=0.25.0",
+    "tenacity>=8.2.3",
+    "pyyaml>=6.0",
+    "xy_market",
+    "langgraph",
+    "langchain-core",
+    "langchain-mcp-adapters==0.1.14",
+    "langchain-google-genai",
+    "langchain-together",
+    "fastmcp>=2.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "pytest-asyncio>=0.23.2",
+    "ruff>=0.1.6",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "aioresponses>=0.7.4", 
+]
+debug = [
+    "debugpy>=1.8.0",
+]
+
+
+[tool.uv.sources]
+xy_market = { path = "../../xy_market", editable = true }
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/seller_template"]
+
+# --- Tool Configurations ---
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "W",   # pycodestyle warnings
+    "C90", # mccabe complexity
+    "N",   # pep8-naming
+    "D",   # pydocstyle
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "S",   # flake8-bandit
+]
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+    "D107", # Missing docstring in __init__
+    "D203", # 1 blank line required before class docstring
+    "D212", # Multi-line docstring summary should start at the first line
+    "S101", # Use of assert detected (common in tests)
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "build",
+    "dist",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint.per-file-ignores]
+"test_seller/**/*" = ["S101", "D"]  # Allow assert in tests, skip docstrings
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/**/*.py"]
+exclude = ["test_seller/", "__pycache__/"]
+strict = true
+ignore_missing_imports = true
+show_error_codes = true
+warn_return_any = false
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+
+# For services with specific typing needs, add:
+# [[tool.mypy.overrides]]
+# module = "your_service.*"
+# ignore_errors = true
+
+[tool.pytest.ini_options]
+testpaths = ["test_seller"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--disable-warnings",
+    "-v",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "payment_enabled: marks tests that require payment to be enabled on the server",
+    "payment_disabled: marks tests that require payment to be disabled on the server",
+    "payment_agnostic: marks tests that work regardless of payment configuration",
+]

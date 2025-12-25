@@ -1,0 +1,77 @@
+[project]
+name = "xy-buyer-template"
+version = "0.1.0"
+description = "Minimalistic buyer example service for Agent Swarms"
+authors = [
+    { name = "XyAgent", email = "agent@xyber.inc" },
+]
+readme = "README.md"
+requires-python = "==3.12.*"
+
+dependencies = [
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "httpx>=0.25.0",
+    "tenacity>=8.2.3",
+    "eth-account>=0.8.0",
+    "fastapi>=0.115.12",
+    "uvicorn[standard]>=0.30.0",
+    "langchain>=0.3.0",
+    "langchain-google-genai>=2.0.0",
+    "langgraph>=1.0.0",
+    "langchain-core>=0.3.0",
+    "xy_market",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "pytest-asyncio>=0.23.2",
+    "ruff>=0.1.6",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+]
+debug = [
+    "debugpy>=1.8.0",
+]
+
+[tool.uv.sources]
+xy_market = { path = "../../xy_market", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/buyer_example"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+select = ["E", "F", "I", "W", "C90", "N", "D", "UP", "B", "S"]
+ignore = ["D100", "D104", "D107", "D203", "D212", "S101"]
+exclude = [".git", "__pycache__", ".venv", "build", "dist"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint.per-file-ignores]
+"test_buyer/**/*" = ["S101", "D"]
+
+[tool.pytest.ini_options]
+testpaths = ["test_buyer"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+addopts = ["--strict-markers", "--strict-config", "--disable-warnings", "-v"]
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration tests",
+    "e2e: marks tests as end-to-end tests",
+]
+

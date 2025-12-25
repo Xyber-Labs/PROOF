@@ -1,0 +1,22 @@
+from enum import Enum
+
+
+class ErrorCode(str, Enum):
+    """Standard error codes."""
+
+    # Common Errors
+    INTERNAL_ERROR = "INTERNAL_ERROR"
+    INVALID_REQUEST = "INVALID_REQUEST"
+    RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
+
+    # Marketplace Errors
+    AGENT_NOT_FOUND = "AGENT_NOT_FOUND"
+    AGENT_ALREADY_REGISTERED = "AGENT_ALREADY_REGISTERED"
+
+    # Payment Errors
+    PAYMENT_REQUIRED = "PAYMENT_REQUIRED"
+    INVALID_PAYMENT_PROOF = "INVALID_PAYMENT_PROOF"
+    INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS"
+
+    # Execution Errors
+    EXECUTION_FAILED = "EXECUTION_FAILED"

@@ -1,0 +1,79 @@
+services:
+  marketplace:
+    build:
+      context: .
+      dockerfile: marketplace/Dockerfile
+      target: dev
+    image: marketplace_img_debug
+    container_name: marketplace_cnt_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5670", "--wait-for-client", "-m", "marketplace", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: ["python", "-m", "marketplace", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+      - "5670:5670"
+    volumes:
+      - ./marketplace/src/marketplace:/app/marketplace/src/marketplace:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
+    env_file: ./marketplace/.env
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/register/new_entries')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  seller:
+    build:
+      context: .
+      dockerfile: examples/seller-template/Dockerfile
+      target: dev
+    image: seller_img_debug
+    container_name: seller_cnt_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5671", "--wait-for-client", "-m", "seller_template", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    command: ["python", "-m", "seller_template", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    ports:
+      - "8001:8001"
+      - "5671:5671"
+    volumes:
+      - ./examples/seller-template/src/seller_template:/app/examples/seller-template/src/seller_template:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
+    env_file: ./examples/seller-template/.env
+    depends_on:
+      marketplace:
+        condition: service_healthy
+
+  mcp-server-weather:
+    build:
+      context: examples/mcp-server-template
+      dockerfile: Dockerfile
+      target: dev
+    image: mcp_weather_img_debug
+    container_name: mcp_weather_cnt_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5672", "--wait-for-client", "-m", "mcp_server_weather", "--host", "0.0.0.0", "--port", "8002", "--reload"]
+    command: ["python", "-m", "mcp_server_weather", "--host", "0.0.0.0", "--port", "8002", "--reload"]
+    ports:
+      - "8002:8002"
+      - "5672:5672"
+    volumes:
+      - ./examples/mcp-server-template/src/mcp_server_weather:/app/src/mcp_server_weather:ro
+    env_file: ./examples/mcp-server-template/.env
+
+  buyer:
+    build:
+      context: .
+      dockerfile: examples/buyer-template/Dockerfile
+      target: dev
+    image: buyer_img_debug
+    container_name: buyer_cnt_debug
+    # command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5673", "--wait-for-client", "-m", "buyer_example", "--host", "0.0.0.0", "--port", "8003", "--reload"]
+    command: ["python", "-m", "buyer_example", "--host", "0.0.0.0", "--port", "8003", "--reload"]
+    ports:
+      - "8003:8003"
+      - "5673:5673"
+    volumes:
+      - ./examples/buyer-template/src/buyer_example:/app/examples/buyer-template/src/buyer_example:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
+    env_file: ./examples/buyer-template/.env
+    depends_on:
+      - marketplace
+      - seller

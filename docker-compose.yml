@@ -1,0 +1,60 @@
+services:
+  marketplace:
+    build:
+      context: .
+      dockerfile: marketplace/Dockerfile
+      target: prod
+    image: marketplace_img
+    container_name: marketplace_cnt
+    env_file:
+      - marketplace/.env
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/register/new_entries')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  seller:
+    build:
+      context: .
+      dockerfile: examples/seller-template/Dockerfile
+      target: prod
+    image: seller_img
+    container_name: seller_cnt
+    env_file:
+      - examples/seller-template/.env
+    ports:
+      - "8001:8001"
+    depends_on:
+      marketplace:
+        condition: service_healthy
+
+  mcp-server-weather:
+    build:
+      context: examples/mcp-server-template
+      dockerfile: Dockerfile
+      target: prod
+    image: mcp_weather_img
+    container_name: mcp_weather_cnt
+    env_file:
+      - examples/mcp-server-template/.env
+    ports:
+      - "8002:8002"
+
+  buyer:
+    build:
+      context: .
+      dockerfile: examples/buyer-template/Dockerfile
+      target: prod
+    image: buyer_img
+    container_name: buyer_cnt
+    env_file:
+      - examples/buyer-template/.env
+    ports:
+      - "8003:8003"
+    depends_on:
+      - marketplace
+      - seller
