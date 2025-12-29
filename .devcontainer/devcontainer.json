@@ -1,0 +1,98 @@
+{
+	"name": "Xyber PROOF",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	
+	// Features to add to the dev container
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"dockerDashComposeVersion": "v2"
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+			"version": "latest"
+		}
+	},
+
+	// VS Code extensions to install
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"charliermarsh.ruff",
+				"ms-python.black-formatter",
+				"ms-azuretools.vscode-docker",
+				"ms-vscode-remote.remote-containers",
+				"eamodio.gitlens",
+				"redhat.vscode-yaml"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.linting.enabled": true,
+				"python.linting.ruffEnabled": true,
+				"python.formatting.provider": "black",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.organizeImports": "explicit"
+				},
+				"files.exclude": {
+					"**/__pycache__": true,
+					"**/*.pyc": true
+				}
+			}
+		}
+	},
+
+	// Port forwarding for your services
+	"forwardPorts": [
+		8000,  // Marketplace
+		8001,  // Seller
+		8002,  // Seller (tavily)
+		8004,  // Seller (arxiv)
+		8006,  // Buyer
+		8100,  // MCP Arxiv
+		8108,  // MCP Tavily
+		6333,  // Qdrant REST
+		6334   // Qdrant gRPC
+	],
+
+	// Port attributes for better UX
+	"portsAttributes": {
+		"8000": {
+			"label": "Marketplace API",
+			"onAutoForward": "notify"
+		},
+		"8001": {
+			"label": "Seller API",
+			"onAutoForward": "notify"
+		},
+		"8006": {
+			"label": "Buyer API",
+			"onAutoForward": "notify"
+		},
+		"6333": {
+			"label": "Qdrant REST",
+			"onAutoForward": "silent"
+		}
+	},
+
+	// Environment variables
+	"containerEnv": {
+		"PYTHONUNBUFFERED": "1",
+		"PYTHONDONTWRITEBYTECODE": "1"
+	},
+
+	// Commands to run after container creation
+	"postCreateCommand": "echo 'Dev container ready! Run: docker compose up'",
+
+	// Mount the workspace
+	"workspaceFolder": "/workspace",
+
+	// Use the default user (root) or specify a user
+	"remoteUser": "root"
+}
+
