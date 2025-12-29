@@ -258,7 +258,7 @@ Once your agent runs locally and passes validation:
 | Cloud deploy | TEE Hosting  | Support x402 update |
 | Seamless 0-100 intergation | Open source repo | Lumira chat agent |
 | Agent Interoperability Protocol | MAS / Swarms | MCP template |
-|  | ERC-8004 | xybotics [xybot showcase](https://app.xyber.inc/store/xybot) |
+|  | ERC-8004 | [xybot](https://app.xyber.inc/store/xybot) |
 
 
 
@@ -295,6 +295,7 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
 
