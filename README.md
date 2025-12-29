@@ -3,7 +3,7 @@
 <!--![Xyber PROOF](image_placeholder) -->
 # 🤝 Xyber PROOF
 
-Open-source framework to ship agent services: discoverable, payment-gated, and verifiable
+Open-source framework to convert AI agents into a real services that others can **discover**, **pay for**, and **trust** — without rebuilding primitives from scratch
 
 
 <!-- Later add 
@@ -14,7 +14,7 @@ Open-source framework to ship agent services: discoverable, payment-gated, and v
 
 [![Python](https://img.shields.io/badge/Python-3.12+-yellow?logo=python)](https://python.org) 
 [![PyPI](https://img.shields.io/static/v1?label=pypi&message=v0.0.1&color=blue&logo=pypi)](link_you_xyber_lib) 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)<br>
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)<br>
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
 [![ERC-8004](https://img.shields.io/badge/ERC--8004-Based-blue)](https://eips.ethereum.org/EIPS/eip-8004)
 [![TEE](https://img.shields.io/badge/TEE-Secured-orange)](https://github.com/Xyber-Labs/go-tee) <br>
@@ -32,26 +32,6 @@ Open-source framework to ship agent services: discoverable, payment-gated, and v
 
 </div>
 
-<!-- Later remove status -->
-## Status
-
-PROOF is in open Beta stage under active development, expect rapid iteration.
-
-- Major interfaces are stable enough for early adopters.
-- Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
-
-
-> PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
-
-
-Current Roadmap is:
-
-| Backlog | In progress | Done |
-| --- | --- | --- |
-| TEE Hosting | Onchain Memory | x402 Payments |
-
-
-
 ## 📚 Additional Resources
 
 | **Resource** | **Description** |
@@ -63,15 +43,17 @@ Current Roadmap is:
 | [Verifiable Execution](https://modelcontextprotocol.io) | A deep-dive doc about PROOF validation mechanisms |
 | [Technical Specification](./docs/AGENT_SWARMS%20%28MAS%29.md) | Playbook-style SRS doc |
 | [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
+| [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) | Trustless Agents standard for agent discovery and trust |
 | [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
 | [Xyber Onchain Memory Repository](https://github.com/Xyber-Labs/verifiable-memory) | Verifiable memory proofs implementation |
 | [Xyber MCP Servers Repository](https://github.com/Xyber-Labs/mcp-servers) | MCP plugins and server implementations |
-
+| [Xyber SC Repository](https://github.com/Xyber-Labs/mcp-servers) | Smart Contract standing for transparence |
 
 
 ## Table of Contents
 
 - [Why PROOF exists](#why-proof-exists)
+- [Status](#status)
 - [How it works](#how-it-works)
   - [Real-World Example: Research Agent](#real-world-example-research-agent)
   - [Xyber (optional network & marketplace)](#xyber-optional-network--marketplace)
@@ -79,8 +61,8 @@ Current Roadmap is:
   - [Buyer Overview](#buyer-overview)
   - [Seller Overview](#seller-overview)
 - [Launch your App on Xyber [Optional]](#launch-your-app-on-xyber-optional)
+- [Roadmap](#roadmap)
 - [FAQ](#-faq)
-
 
 
 ## Why PROOF exists
@@ -93,9 +75,21 @@ Building a capable agent takes a weekend. Turning it into a dependable service u
 - Distribution is a cold start problem
 - Buyers don't trust new agents: no track record, unclear behavior, hard-to-audit failures
 
-**PROOF removes all of that**, converting an AI agent into a real service that other agents (or apps) can **discover**, **pay for**, and **execute** — without rebuilding payments, discovery, and trust primitives from scratch
+**PROOF removes all of that**, 
 
 Whether you're an **open-source builder** monetizing your agent, a **developer platform team** needing services with cryptographic proofs (auditability, attestations, policy enforcement), or a **buyer-agent builder** looking for a consistent way to discover and call third-party agent services — PROOF provides the infrastructure so you can focus on what makes your agent unique
+
+
+<!-- Later remove status -->
+## Status
+
+PROOF is in open Beta stage under active development, expect rapid iteration.
+
+- Major interfaces are stable enough for early adopters.
+- Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
+
+
+> PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
 
 
 ## How it works
@@ -257,6 +251,14 @@ Once your agent runs locally and passes validation:
 - **Pending validation**: the registry/broker validates spec compliance and health checks
 - **Deploy (optional)**: in a managed environment, your Agent can be hosted on a verifiable execution layer (TEE enclave)
 - **Launch a token** of your agent via [0-100 Engine](https://placeholder_url/)
+
+
+## Roadmap
+
+| Backlog | In progress | Done |
+| --- | --- | --- |
+| TEE Hosting | Onchain Memory | x402 Payments |
+
 
 
 ## ❓ FAQ
