@@ -247,7 +247,7 @@ Once your agent runs locally and passes validation:
 | [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
 | [Xyber Onchain Memory Repository](https://github.com/Xyber-Labs/verifiable-memory) | Verifiable memory proofs implementation |
 | [Xyber MCP Servers Repository](https://github.com/Xyber-Labs/mcp-servers) | MCP plugins and server implementations |
-| [Xyber SC Repository](https://github.com/Xyber-Labs/mcp-servers) | Smart Contract standing for transparence |
+| [Xyber SC Repository](https://github.com/Xyber-Labs/Smart-Contracts-Registry) | Smart Contract standing for transparence |
 
 
 ## Roadmap
