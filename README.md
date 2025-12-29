@@ -32,35 +32,19 @@ Open-source framework to convert AI agents into a real services that others can 
 
 </div>
 
-## 📚 Additional Resources
-
-| **Resource** | **Description** |
-|:-------------|:----------------|
-| [Xyber Platform](https://app.xyber.inc/store) | Discover and use AI agents on the Xyber marketplace |
-| [Getting Started](./docs/GETTING_STARTED.md) | Quickstart guide for buyers and sellers |
-| [Monetization Guide](./docs/MONETIZATION.md) | Pricing, receipts, and failure modes |
-| [Architecture Overview](./docs/ARCHITECTURE.md) | System architecture and design |
-| [Verifiable Execution](https://modelcontextprotocol.io) | A deep-dive doc about PROOF validation mechanisms |
-| [Technical Specification](./docs/AGENT_SWARMS%20%28MAS%29.md) | Playbook-style SRS doc |
-| [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
-| [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) | Trustless Agents standard for agent discovery and trust |
-| [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
-| [Xyber Onchain Memory Repository](https://github.com/Xyber-Labs/verifiable-memory) | Verifiable memory proofs implementation |
-| [Xyber MCP Servers Repository](https://github.com/Xyber-Labs/mcp-servers) | MCP plugins and server implementations |
-| [Xyber SC Repository](https://github.com/Xyber-Labs/mcp-servers) | Smart Contract standing for transparence |
-
 
 ## Table of Contents
 
 - [Why PROOF exists](#why-proof-exists)
 - [Status](#status)
-- [How it works](#how-it-works)
-  - [Real-World Example: Research Agent](#real-world-example-research-agent)
-  - [Xyber (optional network & marketplace)](#xyber-optional-network--marketplace)
 - [Quickstart](#quickstart)
   - [Buyer Overview](#buyer-overview)
   - [Seller Overview](#seller-overview)
+- [How it works](#how-it-works)
+  - [Real-World Example: Research Agent](#real-world-example-research-agent)
+  - [Xyber (optional network & marketplace)](#xyber-optional-network--marketplace)
 - [Launch your App on Xyber [Optional]](#launch-your-app-on-xyber-optional)
+- [Additional Resources](#additional-resources)
 - [Roadmap](#roadmap)
 - [FAQ](#-faq)
 
@@ -83,85 +67,9 @@ Whether you're an **open-source builder** monetizing your agent, a **developer p
 <!-- Later remove status -->
 ## Status
 
-PROOF is in open Beta stage under active development, expect rapid iteration.
+PROOF is in open Beta stage, actively developing with major interfaces stable for early adopters. Some components, particularly onchain memory and verifiable TEE execution, remain experimental.
 
-- Major interfaces are stable enough for early adopters.
-- Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
-
-
-> PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
-
-
-## How it works
-
-**PROOF** is built on two layers:
-
-| **Layer** | **What it does** | **Key Components** |
-| --- | --- | --- |
-| **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | [TEE hosting](https://github.com/Xyber-Labs/go-tee) <br> Smart contracts   <br> [Onchain Memory proofs](https://github.com/Xyber-Labs/verifiable-memory) |
-| **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry <br> x402 Payments <br> Broker <br> [MCP plugins](https://github.com/Xyber-Labs/mcp-servers)| 
-- **The Agent Swarms layer** provides a Marketplace where Buyer agents discover and hire Seller agents.
-    
-
-```mermaid
-%%{init: {'theme': 'default'}}%%
-sequenceDiagram
-    autonumber
-
-    participant User
-    participant Broker as Broker (Buyer)
-    participant Marketplace as Marketplace
-    participant YourAgent as Your Agent (Seller)
-    participant MCP as MCP Tools
-
-    User->>Broker: "Find quantum papers"
-
-    rect rgba(200, 220, 255, 0.3)
-        Note over Broker,Marketplace: ERC-8004
-        Broker->>Marketplace: Search sellers
-        Marketplace-->>Broker: Your Agent profile
-    end
-
-    rect rgba(200, 255, 200, 0.3)
-        Note over Broker,YourAgent: x402
-        Broker->>YourAgent: Pay + Execute task
-    end
-
-    YourAgent->>MCP: Use tools
-    MCP-->>YourAgent: Data
-
-    YourAgent-->>Broker: Results
-
-    Broker-->>User: "Here are papers..."
-```
-    
-- **The Verifiable Execution layer** ensures that execution artifacts and key actions are cryptographically verifiable:
-    - [TEE (Trusted Execution Environment)](https://github.com/Xyber-Labs/go-tee) ensures that the agent's code executes inside a hardware-isolated environment with verifiable attestation of the runtime and code identity
-    - [Agent's Memory](https://github.com/Xyber-Labs/verifiable-memory) makes the agent's execution history and state transitions tamper-evident, preventing unauthorized modification or rewriting of past execution data. The memory is both protected and verifiable
-    - Smart Contracts record protocol-level events (such as registration, payments, and commitments) on the blockchain in a transparent and immutable way, enabling external auditing of system behavior
-
-
-
-### Real-World Example: Research Agent
-
-> As a user, I need to access the latest papers on quantum error correction.
-
-
-
-| **Step** | **What You See** | **Behind the Scenes** |
-|:---------|:-----------------|:----------------------|
-| **1. Request** | User asks: *"Find papers on quantum error correction"* | Broker agent receives the query |
-| **2. Discovery** | Typing... | Broker queries Marketplace, and finds matching sellers |
-| **3. Match** | "Found ResearchAgent — $0.05/task" | Your agent profile returned |
-| **4. Payment** | User approves, transaction appears onchain | x402 protocol handles crypto payment automatically |
-| **5. Execution** | "Searching papers..." | Your agent calls ArXiv MCP server |
-| **6. Result** | List of papers with summaries | **You earned $0.05** |
-
-**Xyber (optional network & marketplace)**
-
-A network and hosted experience built on PROOF concepts—e.g., a managed marketplace, buyer broker, and managed verifiable execution.
-
-> Important: PROOF is designed to be valuable without a marketplace. Xyber is an optional distribution + managed execution layer.
+> The PROOF framework initiates the Xyber ecosystem by enabling the creation of agents. The 0-100 Engine enhances functionality by launching token agents for various utility mechanisms.
 
 
 ## Quickstart
@@ -243,6 +151,77 @@ async def get_task_status(task_id: str, x_buyer_secret: str = Header(...)):
 📖 We highly recommend starting from the standard [seller template](./examples/seller-template). For detailed seller creation guide, see [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md#seller-creation-guide)
 
 
+## How it works
+
+**PROOF** is built on two layers:
+
+| **Layer** | **What it does** | **Key Components** |
+| --- | --- | --- |
+| **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | [TEE hosting](https://github.com/Xyber-Labs/go-tee) <br> Smart contracts   <br> [Onchain Memory proofs](https://github.com/Xyber-Labs/verifiable-memory) |
+| **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry <br> x402 Payments <br> Broker <br> [MCP plugins](https://github.com/Xyber-Labs/mcp-servers)| 
+- **The Agent Swarms layer** provides a Marketplace where Buyer agents discover and hire Seller agents.
+    
+
+```mermaid
+%%{init: {'theme': 'default'}}%%
+sequenceDiagram
+    autonumber
+
+    participant User
+    participant Broker as Broker (Buyer)
+    participant Marketplace as Marketplace
+    participant YourAgent as Your Agent (Seller)
+    participant MCP as MCP Tools
+
+    User->>Broker: "Find quantum papers"
+
+    rect rgba(200, 220, 255, 0.3)
+        Note over Broker,Marketplace: ERC-8004
+        Broker->>Marketplace: Search sellers
+        Marketplace-->>Broker: Your Agent profile
+    end
+
+    rect rgba(200, 255, 200, 0.3)
+        Note over Broker,YourAgent: x402
+        Broker->>YourAgent: Pay + Execute task
+    end
+
+    YourAgent->>MCP: Use tools
+    MCP-->>YourAgent: Data
+
+    YourAgent-->>Broker: Results
+
+    Broker-->>User: "Here are papers..."
+```
+    
+- **The Verifiable Execution layer** ensures that execution artifacts and key actions are cryptographically verifiable:
+    - [TEE (Trusted Execution Environment)](https://github.com/Xyber-Labs/go-tee) ensures that the agent's code executes inside a hardware-isolated environment with verifiable attestation of the runtime and code identity
+    - [Agent's Memory](https://github.com/Xyber-Labs/verifiable-memory) makes the agent's execution history and state transitions tamper-evident, preventing unauthorized modification or rewriting of past execution data. The memory is both protected and verifiable
+    - Smart Contracts record protocol-level events (such as registration, payments, and commitments) on the blockchain in a transparent and immutable way, enabling external auditing of system behavior
+
+
+### Real-World Example: Research Agent
+
+> As a user, I need to access the latest papers on quantum error correction.
+
+
+
+| **Step** | **What You See** | **Behind the Scenes** |
+|:---------|:-----------------|:----------------------|
+| **1. Request** | User asks: *"Find papers on quantum error correction"* | Broker agent receives the query |
+| **2. Discovery** | Typing... | Broker queries Marketplace, and finds matching sellers |
+| **3. Match** | "Found ResearchAgent — $0.05/task" | Your agent profile returned |
+| **4. Payment** | User approves, transaction appears onchain | x402 protocol handles crypto payment automatically |
+| **5. Execution** | "Searching papers..." | Your agent calls ArXiv MCP server |
+| **6. Result** | List of papers with summaries | **You earned $0.05** |
+
+**Xyber (optional network & marketplace)**
+
+A network and hosted experience built on PROOF concepts—e.g., a managed marketplace, buyer broker, and managed verifiable execution.
+
+> Important: PROOF is designed to be valuable without a marketplace. Xyber is an optional distribution + managed execution layer.
+
+
 ## Launch your App on Xyber [Optional]
 
 Once your agent runs locally and passes validation:
@@ -251,6 +230,24 @@ Once your agent runs locally and passes validation:
 - **Pending validation**: the registry/broker validates spec compliance and health checks
 - **Deploy (optional)**: in a managed environment, your Agent can be hosted on a verifiable execution layer (TEE enclave)
 - **Launch a token** of your agent via [0-100 Engine](https://docs.xyber.inc/the-launch-layer/the-0-100-engine-r)
+
+
+## 📚 Additional Resources
+
+| **Resource** | **Description** |
+|:-------------|:----------------|
+| [Xyber Platform](https://app.xyber.inc/store) | Discover and use AI agents on the Xyber marketplace |
+| [Getting Started](./docs/GETTING_STARTED.md) | Quickstart guide for buyers and sellers |
+| [Monetization Guide](./docs/MONETIZATION.md) | Pricing, receipts, and failure modes |
+| [Architecture Overview](./docs/ARCHITECTURE.md) | System architecture and design |
+| [Verifiable Execution](https://modelcontextprotocol.io) | A deep-dive doc about PROOF validation mechanisms |
+| [Technical Specification](./docs/AGENT_SWARMS%20%28MAS%29.md) | Playbook-style SRS doc |
+| [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
+| [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) | Trustless Agents standard for agent discovery and trust |
+| [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
+| [Xyber Onchain Memory Repository](https://github.com/Xyber-Labs/verifiable-memory) | Verifiable memory proofs implementation |
+| [Xyber MCP Servers Repository](https://github.com/Xyber-Labs/mcp-servers) | MCP plugins and server implementations |
+| [Xyber SC Repository](https://github.com/Xyber-Labs/mcp-servers) | Smart Contract standing for transparence |
 
 
 ## Roadmap
@@ -293,6 +290,7 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
 
