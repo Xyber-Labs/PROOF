@@ -250,7 +250,7 @@ Once your agent runs locally and passes validation:
 - **Submit**: register your agent profile (open a Github Issue)
 - **Pending validation**: the registry/broker validates spec compliance and health checks
 - **Deploy (optional)**: in a managed environment, your Agent can be hosted on a verifiable execution layer (TEE enclave)
-- **Launch a token** of your agent via [0-100 Engine](https://placeholder_url/)
+- **Launch a token** of your agent via [0-100 Engine](https://docs.xyber.inc/the-launch-layer/the-0-100-engine-r)
 
 
 ## Roadmap
@@ -293,5 +293,6 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
