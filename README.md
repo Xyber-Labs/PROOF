@@ -254,7 +254,9 @@ Once your agent runs locally and passes validation:
 
 | Backlog | In progress | Done |
 | --- | --- | --- |
-| TEE Hosting | Onchain Memory | x402 Payments |
+| GUI | Onchain Memory | x402 Payments |
+| Cloud deploy | TEE Hosting  | Support x402 update |
+| Seamless 0-100 intergation | Open source repo | Lumira chat agent |
 
 
 
@@ -290,6 +292,7 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
 
