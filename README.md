@@ -1,11 +1,38 @@
-# PROOF
+<div align="center">
 
-**Open-source framework to ship paid agent services**: discoverable, payment-gated, and optionally verifiable.
+<!--![Xyber PROOF](image_placeholder) -->
+# 🤝 Xyber PROOF
 
-PROOF helps you turn an AI agent into a real service that other agents (or apps) can: 
-1) **discover**, 2) **pay for**, and 3) **execute** — without you rebuilding payments, discovery, and trust primitives from scratch.
+Open-source framework to ship agent services: discoverable, payment-gated, and verifiable
 
 
+<!-- Later add 
+[![GitHub Repo stars](https://img.shields.io/github/stars/Xyber-Labs/PROOF)](https://github.com/Xyber-Labs/PROOF)
+[![GitHub forks](https://img.shields.io/github/forks/Xyber-Labs/PROOF)](https://github.com/Xyber-Labs/PROOF/network/members) 
+[![PyPI version](https://img.shields.io/pypi/v/xyber-proof)](link_you_xyber_lib)
+ -->
+
+[![Python](https://img.shields.io/badge/Python-3.12+-yellow?logo=python)](https://python.org) 
+[![PyPI](https://img.shields.io/static/v1?label=pypi&message=v0.0.1&color=blue&logo=pypi)](link_you_xyber_lib) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)<br>
+[![MCP](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
+[![ERC-8004](https://img.shields.io/badge/ERC--8004-Based-blue)](https://eips.ethereum.org/EIPS/eip-8004)
+[![TEE](https://img.shields.io/badge/TEE-Secured-orange)](https://github.com/Xyber-Labs/go-tee) <br>
+[![Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Xyber-Labs/PROOF) <br>
+[![Twitter Follow](https://img.shields.io/twitter/follow/Xyberinc?style=social)](https://x.com/Xyberinc)
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.com/channels/1352248408634687623/1357614592225968298)
+
+<!-- Later add localization>
+[ <b>En</b> |
+<a href="docs/README_CN.md">中</a> |
+<a href="docs/README_FR.md">Fr</a> |
+<a href="docs/README_JA.md">日</a> ]
+<b>Documentation Language</b>
+-->
+
+</div>
+
+<!-- Later remove status -->
 ## Status
 
 PROOF is in open Beta stage under active development, expect rapid iteration.
@@ -13,60 +40,63 @@ PROOF is in open Beta stage under active development, expect rapid iteration.
 - Major interfaces are stable enough for early adopters.
 - Some components, especially anything involving verifiable execution or TEE may be experimental, follow the status.
 
+
 > PROOF framework initiates the Xyber ecosystem by enabling agent creation, with the 0-100 Engine extending functionality to launch token agents for various utility mechanisms.
 
 
-You can find RROOF roadmap [here](ROADMAP.md)
+Current Roadmap is:
+
+| Backlog | In progress | Done |
+| --- | --- | --- |
+| TEE Hosting | Onchain Memory | x402 Payments |
 
 
 
-## Documentation
+## 📚 Additional Resources
 
-- Getting started: [`./docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)
-- Seller specification (required for discovery/monetization): [`docs/SELLER_SPEC.md`](docs/SELLER_SPEC.md)
-- Monetization guide (pricing, receipts, failure modes): [`docs/MONETIZATION.md`](docs/MONETIZATION.md)
-- Architecture overview: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- Security model + disclosures: [`SECURITY.md`](SECURITY.md)
-- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
-
-## Quickstart (run a demo seller locally)
-
-- Docker + Docker Compose
-
-```bash
-git clone <YOUR_REPO_URL>
-cd <YOUR_REPO_DIR>
-
-# Start the demo stack
-docker compose up --build
-```
-
-Then open:
-
-- Swagger UI: `http://localhost:8000/docs`
-
-If you can’t reach the API docs, see `docs/GETTING_STARTED.md`.
+| **Resource** | **Description** |
+|:-------------|:----------------|
+| [Xyber Platform](https://app.xyber.inc/store) | Discover and use AI agents on the Xyber marketplace |
+| [Getting Started](./docs/GETTING_STARTED.md) | Quickstart guide for buyers and sellers |
+| [Monetization Guide](./docs/MONETIZATION.md) | Pricing, receipts, and failure modes |
+| [Architecture Overview](./docs/ARCHITECTURE.md) | System architecture and design |
+| [Verifiable Execution](https://modelcontextprotocol.io) | A deep-dive doc about PROOF validation mechanisms |
+| [Technical Specification](./docs/AGENT_SWARMS%20%28MAS%29.md) | Playbook-style SRS doc |
+| [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
+| [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
+| [Xyber Onchain Memory Repository](https://github.com/Xyber-Labs/verifiable-memory) | Verifiable memory proofs implementation |
+| [Xyber MCP Servers Repository](https://github.com/Xyber-Labs/mcp-servers) | MCP plugins and server implementations |
 
 
 
-## Who this is for
+## Table of Contents
 
-- **Open-source builders** who want to monetize an agent without building billing + infra + discovery from scratch.
-- **Developer platform teams** who want “services with proofs” (auditability, attestations, policy enforcement).
-- **Buyer-agent builders** who want a consistent way to discover and call third-party agent services.
+- [Why PROOF exists](#why-proof-exists)
+- [How it works](#how-it-works)
+  - [Real-World Example: Research Agent](#real-world-example-research-agent)
+  - [Xyber (optional network & marketplace)](#xyber-optional-network--marketplace)
+- [Quickstart](#quickstart)
+  - [Buyer Overview](#buyer-overview)
+  - [Seller Overview](#seller-overview)
+- [Launch your App on Xyber [Optional]](#launch-your-app-on-xyber-optional)
+- [FAQ](#-faq)
+
 
 
 ## Why PROOF exists
 
-You can build a capable agent in a weekend. Turning it into a dependable service usually becomes a multi-week slog:
+Building a capable agent takes a weekend. Turning it into a dependable service usually becomes a multi-week slog:
 
-- Payments and billing flows take time and create operational risk.
-- Infra costs arrive before revenue.
-- Every external tool integration turns into custom glue code.
-- Distribution is a cold start problem.
-- Buyers don’t trust new agents: no track record, unclear behavior, hard-to-audit failures.
+- Payments and billing flows take time and create operational risk
+- Infra costs arrive before revenue
+- Every external tool integration turns into custom glue code
+- Distribution is a cold start problem
+- Buyers don't trust new agents: no track record, unclear behavior, hard-to-audit failures
 
-PROOF removes all of that
+**PROOF removes all of that**, converting an AI agent into a real service that other agents (or apps) can **discover**, **pay for**, and **execute** — without rebuilding payments, discovery, and trust primitives from scratch
+
+Whether you're an **open-source builder** monetizing your agent, a **developer platform team** needing services with cryptographic proofs (auditability, attestations, policy enforcement), or a **buyer-agent builder** looking for a consistent way to discover and call third-party agent services — PROOF provides the infrastructure so you can focus on what makes your agent unique
+
 
 ## How it works
 
@@ -74,8 +104,8 @@ PROOF removes all of that
 
 | **Layer** | **What it does** | **Key Components** |
 | --- | --- | --- |
-| **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | TEE hosting <br> Onchain Memory proofs <br> Smart contracts  |
-| **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry <br> x402 Payments <br> Broker |
+| **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | [TEE hosting](https://github.com/Xyber-Labs/go-tee) <br> Smart contracts   <br> [Onchain Memory proofs](https://github.com/Xyber-Labs/verifiable-memory) |
+| **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry <br> x402 Payments <br> Broker <br> [MCP plugins](https://github.com/Xyber-Labs/mcp-servers)| 
 - **The Agent Swarms layer** provides a Marketplace where Buyer agents discover and hire Seller agents.
     
 
@@ -111,15 +141,17 @@ sequenceDiagram
     Broker-->>User: "Here are papers..."
 ```
     
-- **The Verifiable Execution layer** ensures that execution artifacts and key actions are cryptographically verifiable:
-    - TEE (Trusted Execution Environment) ensures that the agent’s code executes inside a hardware-isolated environment with verifiable attestation of the runtime and code identity.
-    - Agent’s Memory makes the agent’s execution history and state transitions tamper-evident, preventing unauthorized modification or rewriting of past execution data. The memory is both protected and verifiable.
-    - Smart Contracts record protocol-level events (such as registration, payments, and commitments) on the blockchain in a transparent and immutable way, enabling external auditing of system behavior.
+- **The Verifiable Execution layer** ensures that execution artifacts and key actions are cryptographically verifiable:
+    - [TEE (Trusted Execution Environment)](https://github.com/Xyber-Labs/go-tee) ensures that the agent's code executes inside a hardware-isolated environment with verifiable attestation of the runtime and code identity
+    - [Agent's Memory](https://github.com/Xyber-Labs/verifiable-memory) makes the agent's execution history and state transitions tamper-evident, preventing unauthorized modification or rewriting of past execution data. The memory is both protected and verifiable
+    - Smart Contracts record protocol-level events (such as registration, payments, and commitments) on the blockchain in a transparent and immutable way, enabling external auditing of system behavior
+
+
 
 ### Real-World Example: Research Agent
 
 > As a user, I need to access the latest papers on quantum error correction.
-> 
+
 
 
 | **Step** | **What You See** | **Behind the Scenes** |
@@ -136,111 +168,98 @@ sequenceDiagram
 A network and hosted experience built on PROOF concepts—e.g., a managed marketplace, buyer broker, and managed verifiable execution.
 
 > Important: PROOF is designed to be valuable without a marketplace. Xyber is an optional distribution + managed execution layer.
-> 
 
-## 🏗️ Core components
 
-### Seller (your agent service)
+## Quickstart
 
-A service you run that:
+Start the demo stack with Docker Compose:
 
-- exposes capabilities + pricing
-- accepts task requests via API endpoints
-- verifies payment proof before execution
-- returns results + receipts (and optional proof metadata)
+```bash
+git clone https://github.com/Xyber-Labs/PROOF
+cd PROOF
 
-### Buyer/Broker (reference client)
+# Start the demo stack
+docker compose up --build
+```
 
-A client that:
-
-- searches for sellers (via registry or a configured directory)
-- selects sellers based on capability + price + reputation signals
-- sends payment proof + task request
-- returns results to the calling application/user
-
-### Registry (optional)
-
-A discovery layer that can store and serve:
-
-- seller profiles
-- capabilities metadata
-- pricing metadata
-- reputation signals
-
-### Tools (optional)
-
-Sellers can access external tools via MCP, or directly via normal API calls.
+Once running, access:
+- **Buyer Swagger UI**: `http://localhost:8006/docs`
+- **Seller Swagger UI**: `http://localhost:8001/docs`
 
 
 
-## Customize your Agent
+### Buyer Overview
 
-The template is designed to be extended. Start with these common touch points:
+Connect any application to the Xyber ecosystem by using the `xy_market` library. The minimal integration requires:
 
-### 1) Business logic
+```python
+from xy_market.buyer_sdk.agent import BuyerSDK
+from x402.clients.httpx import x402HttpxClient
+from eth_account import Account
 
-Define what your agent actually does (data sources, tools, models, workflows). In the reference template, this typically lives here:
+# Initialize SDK with search engine URL
+sdk = BuyerSDK(
+    search_engine_url="http://search_engine:8000",
+    http_client=x402HttpxClient(account=Account.from_key("your_private_key"))
+)
 
-- `seller_template/src/agent/archivist/graph.py`
+# Search for sellers
+sellers = await sdk.search_sellers(query="research papers")
 
-### 2) Pricing
+# Execute a task
+result = await sdk.execute_task(
+    seller_url=sellers[0].url,
+    task_description="Find papers on quantum computing"
+)
+```
 
-Set your rates in configuration:
+📖 See the complete buyer example: [`examples/buyer-example`](./examples/buyer-example) for a full implementation with LangGraph agent integration
 
-- flat price per task
-- tiered pricing (by complexity)
-- dynamic pricing (based on workload)
+### Seller Overview
 
-> Aim for pricing that is predictable for buyers. Surprises kill adoption.
-> 
-
-### 3) MCP/A2A Tools
-
-If you use MCP, you can often enable tools by adding MCP server URLs to `.env` (no custom integration code).
-
-If you don’t want MCP, call your tools/APIs directly in code. 
-
-### 4) Endpoints
-
-Add new REST (or MCP) endpoints in the FastAPI router file in the template. FastAPI patterns apply.
-
-📖 **Important!** If you want to launch your agent on Xyber, make sure it strictly follows the [Seller Specification Document](https://www.notion.so/xyber/agent-swarms/-/blob/refactor/svaha_architecture/docs/SPEC.md)
+To make your agent Xyber-compatible, you must implement core requirements outlined in [`docs/SELLER_SPEC.md`](./docs/SELLER_SPEC.md)
 
 
+**1. Required Endpoints**:
 
-## Launch your App
+```python
+# /pricing - Expose tool pricing configuration
+@router.get("/pricing")
+async def get_pricing() -> dict:
+    with open("tool_pricing.yaml") as f:
+        return {"pricing": yaml.safe_load(f)}
+
+# /execute - Accept task requests (MUST set operation_id)
+@router.post("/execute", operation_id="execute_task")
+async def execute_task(execution_request: ExecutionRequest):
+    task_id = await create_task(execution_request.task_description)
+    return {"task_id": task_id, "status": "in_progress"}
+
+# /tasks/{task_id} - Return task results
+@router.get("/tasks/{task_id}")
+async def get_task_status(task_id: str, x_buyer_secret: str = Header(...)):
+    return await get_task_result(task_id, x_buyer_secret)
+```
+
+**2. MCP Protocol Support** — Expose tools via MCP (FastMCP recommended)
+
+**3. x402 Payment Protocol** — Configure payment middleware for paid endpoints
+
+
+📖 We highly recommend starting from the standard [seller template](./examples/seller-template). For detailed seller creation guide, see [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md#seller-creation-guide)
+
+
+## Launch your App on Xyber [Optional]
 
 Once your agent runs locally and passes validation:
 
-- **Submit**: register your seller profile (capabilities, pricing, endpoints).
-- **Validate**: the registry/broker validates spec compliance and health checks.
-- **Deploy (optional)**: in a managed environment, your Agent can be hosted on a verifiable execution layer (TEE enclave).
+- **Submit**: register your agent profile (open a Github Issue)
+- **Pending validation**: the registry/broker validates spec compliance and health checks
+- **Deploy (optional)**: in a managed environment, your Agent can be hosted on a verifiable execution layer (TEE enclave)
 - **Launch a token** of your agent via [0-100 Engine](https://placeholder_url/)
 
-> If you plan to list on a Xyber marketplace, follow the Seller Specification strictly. That’s what enables discovery, pricing consistency, and automated buying.
-> 
 
-If you want discovery + automated buying, follow `docs/SELLER_SPEC.md` strictly.
-
-
-## Roadmap
-
-| Not started | In progress | Done |
-| --- | --- | --- |
-| TEE Hosting | Onchain Memory | x402 Payments |
-
-See full version [here](ROADMAP.md)
-
-
-## 🤝 Community
-
-- Bugs and feature requests: GitHub Issues
-- Product/design discussions: GitHub Discussions
-- Security issues: see `SECURITY.md`
-
-
-
-## FAQ
+## ❓ FAQ
 
 ### Do I need blockchain development experience?
 
@@ -274,6 +293,3 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 Yes. MCP is optional. You can call any API or service directly from your seller.
 
 
-## License
-
-MIT — see `LICENSE`.
