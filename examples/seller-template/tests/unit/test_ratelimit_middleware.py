@@ -7,13 +7,12 @@ limit enforcement, window management, and path matching.
 from __future__ import annotations
 
 import time
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 
 import pytest
 import pytest_asyncio
 from fastapi import FastAPI, status
 from httpx import ASGITransport, AsyncClient
-
 from xy_market.middleware.ratelimit import RateLimitMiddleware
 
 
@@ -61,9 +60,7 @@ class TestRateLimitMiddlewareBasicFunctionality:
             yield c
 
     @pytest.mark.asyncio
-    async def test_requests_within_limit_succeed(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_requests_within_limit_succeed(self, client: AsyncClient) -> None:
         """Verify requests within the rate limit succeed.
 
         Given a rate limit of 3 requests per window,
@@ -72,12 +69,10 @@ class TestRateLimitMiddlewareBasicFunctionality:
         """
         for i in range(3):
             response = await client.get("/api/execute")
-            assert response.status_code == 200, f"Request {i+1} failed"
+            assert response.status_code == 200, f"Request {i + 1} failed"
 
     @pytest.mark.asyncio
-    async def test_requests_exceeding_limit_get_429(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_requests_exceeding_limit_get_429(self, client: AsyncClient) -> None:
         """Verify requests exceeding the rate limit get 429.
 
         Given a rate limit of 3 requests per window,
@@ -94,9 +89,7 @@ class TestRateLimitMiddlewareBasicFunctionality:
         assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
     @pytest.mark.asyncio
-    async def test_rate_limit_response_body(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_rate_limit_response_body(self, client: AsyncClient) -> None:
         """Verify rate limit response contains error details.
 
         Given a request that exceeds the rate limit,
@@ -155,9 +148,7 @@ class TestRateLimitMiddlewarePathMatching:
         assert response.status_code == 200
 
     @pytest.mark.asyncio
-    async def test_prefix_matching_for_admin_paths(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_prefix_matching_for_admin_paths(self, client: AsyncClient) -> None:
         """Verify prefix matching works for path patterns.
 
         Given a rate limit for '/api/admin' prefix,
@@ -173,9 +164,7 @@ class TestRateLimitMiddlewarePathMatching:
         assert response.status_code == 429
 
     @pytest.mark.asyncio
-    async def test_unmatched_paths_are_not_limited(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_unmatched_paths_are_not_limited(self, client: AsyncClient) -> None:
         """Verify paths without matching limits are not rate limited.
 
         Given no rate limit for /api/tasks,
@@ -204,9 +193,7 @@ class TestRateLimitMiddlewareRegexPatterns:
             yield c
 
     @pytest.mark.asyncio
-    async def test_regex_pattern_matching(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_regex_pattern_matching(self, client: AsyncClient) -> None:
         """Verify regex patterns work for rate limiting.
 
         Given a regex pattern for task paths,
@@ -242,7 +229,9 @@ class TestRateLimitMiddlewareWindowReset:
         )
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             # Exhaust the limit
             for _ in range(2):
                 response = await client.get("/api/execute")
@@ -324,7 +313,9 @@ class TestRateLimitMiddlewareIPBasedKey:
         )
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             # All requests appear to come from same IP (testserver)
             for _ in range(2):
                 response = await client.get("/api/execute")
@@ -352,7 +343,9 @@ class TestRateLimitMiddlewareEdgeCases:
         )
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             # First request should succeed
             response = await client.get("/api/execute")
             assert response.status_code == 200
@@ -374,7 +367,9 @@ class TestRateLimitMiddlewareEdgeCases:
         )
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             for _ in range(100):
                 response = await client.get("/api/execute")
                 assert response.status_code == 200
@@ -390,7 +385,9 @@ class TestRateLimitMiddlewareEdgeCases:
         app = create_test_app(limits={}, window_seconds=60)
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             for _ in range(100):
                 response = await client.get("/api/execute")
                 assert response.status_code == 200
@@ -411,7 +408,9 @@ class TestRateLimitMiddlewareEdgeCases:
         )
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             # Make 10 concurrent requests
             tasks = [client.get("/api/execute") for _ in range(10)]
             responses = await asyncio.gather(*tasks)
@@ -460,9 +459,7 @@ class TestRateLimitMiddlewareInternalMethods:
         limit = middleware._get_limit("/api/unknown")
         assert limit is None
 
-    def test_get_key_with_buyer_secret(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_get_key_with_buyer_secret(self, middleware: RateLimitMiddleware) -> None:
         """Verify _get_key uses buyer secret for task paths."""
         request = MagicMock()
         request.headers = {"X-Buyer-Secret": "test-secret-123"}
@@ -484,9 +481,7 @@ class TestRateLimitMiddlewareInternalMethods:
         key = middleware._get_key(request, "/api/execute")
         assert key == "ip:192.168.1.100:/api/execute"
 
-    def test_get_key_handles_none_client(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_get_key_handles_none_client(self, middleware: RateLimitMiddleware) -> None:
         """Verify _get_key handles None client gracefully."""
         request = MagicMock()
         request.headers = {}
@@ -506,9 +501,7 @@ class TestRateLimitMiddlewareInternalMethods:
         result = middleware._check_rate_limit("test-key", 5)
         assert result is True
 
-    def test_check_rate_limit_at_limit(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_check_rate_limit_at_limit(self, middleware: RateLimitMiddleware) -> None:
         """Verify _check_rate_limit returns False when limit reached."""
         for _ in range(5):
             middleware._check_rate_limit("limit-key", 5)
@@ -538,9 +531,7 @@ class TestRateLimitMiddlewareHTTPMethods:
             yield c
 
     @pytest.mark.asyncio
-    async def test_post_requests_are_rate_limited(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_post_requests_are_rate_limited(self, client: AsyncClient) -> None:
         """Verify POST requests respect rate limits.
 
         Given a rate limit on an endpoint,
@@ -590,9 +581,7 @@ class TestRateLimitMiddleware429ResponseDetails:
         assert "120 seconds" in data["message"]
 
     @pytest.mark.asyncio
-    async def test_429_response_json_structure(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_429_response_json_structure(self, client: AsyncClient) -> None:
         """Verify 429 response has correct JSON structure.
 
         Given a rate limit exceeded,
@@ -627,7 +616,9 @@ class TestRateLimitMiddlewareForwardedHeaders:
         )
         transport = ASGITransport(app=app)
 
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             for _ in range(2):
                 response = await client.get("/api/execute")
                 assert response.status_code == 200
@@ -650,9 +641,7 @@ class TestRateLimitMiddlewareCounterCleanup:
             window_seconds=1,
         )
 
-    def test_counter_reset_after_window(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_counter_reset_after_window(self, middleware: RateLimitMiddleware) -> None:
         """Verify counter resets after window expires.
 
         Given requests that exhaust the limit,
@@ -713,7 +702,7 @@ class TestRateLimitMiddlewarePatternPriority:
             app=app,
             limits={
                 "/api/users": 10,  # Exact match for /api/users only
-                "/api/admin": 5,   # Prefix match for /api/admin/*
+                "/api/admin": 5,  # Prefix match for /api/admin/*
                 "^/api/items/[0-9]+$": 20,  # Regex pattern for numeric IDs
             },
             window_seconds=60,
@@ -731,9 +720,7 @@ class TestRateLimitMiddlewarePatternPriority:
         limit = middleware._get_limit("/api/users")
         assert limit == 10
 
-    def test_prefix_match_for_subpaths(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_prefix_match_for_subpaths(self, middleware: RateLimitMiddleware) -> None:
         """Verify prefix matching works for subpaths.
 
         Given a path that matches a prefix pattern,
@@ -743,9 +730,7 @@ class TestRateLimitMiddlewarePatternPriority:
         limit = middleware._get_limit("/api/admin/settings")
         assert limit == 5
 
-    def test_regex_match_for_numeric_ids(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_regex_match_for_numeric_ids(self, middleware: RateLimitMiddleware) -> None:
         """Verify regex matching works for numeric ID paths.
 
         Given a path with numeric ID that matches regex,
@@ -755,9 +740,7 @@ class TestRateLimitMiddlewarePatternPriority:
         limit = middleware._get_limit("/api/items/12345")
         assert limit == 20
 
-    def test_no_match_returns_none(
-        self, middleware: RateLimitMiddleware
-    ) -> None:
+    def test_no_match_returns_none(self, middleware: RateLimitMiddleware) -> None:
         """Verify unmatched path returns None.
 
         Given a path that matches no patterns,

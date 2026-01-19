@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from xy_market.models.execution import ExecutionRequest
 
 

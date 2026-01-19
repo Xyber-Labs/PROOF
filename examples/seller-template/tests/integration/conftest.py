@@ -35,4 +35,3 @@ async def paid_client():
         trust_env=False,
     ) as client:
         yield config, client
-

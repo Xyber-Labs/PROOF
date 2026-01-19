@@ -199,6 +199,37 @@ class BuyerX402Settings(BaseSettings):
     wallet_private_key: str | None = None
 
 
+class MarketplaceRegistrationSettings(BaseSettings):
+    """Settings for auto-registration with marketplace on startup."""
+
+    model_config = SettingsConfigDict(
+        env_prefix="SELLER_REGISTRATION_",
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore",
+    )
+
+    # Enable/disable auto-registration
+    enabled: bool = False
+
+    # Marketplace connection
+    marketplace_base_url: str = "http://marketplace:8000"
+
+    # Agent identity (used in registration request)
+    agent_name: str = "Seller Template Agent"
+    description: str = "A template seller agent"
+    tags: list[str] = Field(default_factory=list)
+
+    # Base URL that marketplace should use to reach this seller
+    # Should be the URL from marketplace's perspective (Docker service name)
+    seller_base_url: str = "http://seller:8001"
+
+    # Retry settings
+    retry_attempts: int = 3
+    retry_delay_seconds: float = 2.0
+
+
 @lru_cache(maxsize=1)
 def get_settings() -> AppSettings:
     return AppSettings()
@@ -217,3 +248,8 @@ def get_x402_settings() -> X402Config:
 @lru_cache(maxsize=1)
 def get_buyer_x402_settings() -> BuyerX402Settings:
     return BuyerX402Settings()
+
+
+@lru_cache(maxsize=1)
+def get_marketplace_registration_settings() -> MarketplaceRegistrationSettings:
+    return MarketplaceRegistrationSettings()

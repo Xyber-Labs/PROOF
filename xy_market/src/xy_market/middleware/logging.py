@@ -15,7 +15,8 @@ SECRET_FIELDS = ["secrets", "api_key", "password", "token", "private_key", "secr
 
 
 def mask_secrets(data: dict[str, Any], path: str = "") -> dict[str, Any]:
-    """Recursively mask secret fields in data.
+    """
+    Recursively mask secret fields in data.
 
     Args:
         data: Data dictionary
@@ -23,6 +24,7 @@ def mask_secrets(data: dict[str, Any], path: str = "") -> dict[str, Any]:
 
     Returns:
         Data with secrets masked
+
     """
     masked = {}
     for key, value in data.items():
@@ -64,9 +66,10 @@ class SecretMaskingMiddleware(BaseHTTPMiddleware):
             if hasattr(response, "body"):
                 response_body = json.loads(response.body.decode())
                 masked_response = mask_secrets(response_body)
-                logger.debug(f"Response: {response.status_code} - Body: {json.dumps(masked_response)}")
+                logger.debug(
+                    f"Response: {response.status_code} - Body: {json.dumps(masked_response)}"
+                )
         except Exception:
             logger.debug(f"Response: {response.status_code}")
 
         return response
-

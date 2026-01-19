@@ -10,9 +10,7 @@ import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-import pytest_asyncio
 from langchain_core.messages import AIMessage, ToolMessage
-
 from xy_market.models.execution import ExecutionRequest, ExecutionResult
 
 from seller_template.dependencies import DependencyContainer
@@ -50,9 +48,9 @@ class TestExecutionServiceCreation:
             "seller_template.execution_service.ArchivistGraphBuilder"
         ) as mock_builder:
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [AIMessage(content="Done")]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={"messages": [AIMessage(content="Done")]}
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(
@@ -82,9 +80,9 @@ class TestExecutionServiceCreation:
             "seller_template.execution_service.ArchivistGraphBuilder"
         ) as mock_builder:
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [AIMessage(content="Done")]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={"messages": [AIMessage(content="Done")]}
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(dependencies=mock_dependencies)
@@ -112,9 +110,9 @@ class TestExecutionServiceCreation:
             "seller_template.execution_service.ArchivistGraphBuilder"
         ) as mock_builder:
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [AIMessage(content="Done")]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={"messages": [AIMessage(content="Done")]}
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(dependencies=mock_dependencies)
@@ -156,11 +154,11 @@ class TestExecutionServiceAsyncExecution:
             "seller_template.execution_service.ArchivistGraphBuilder"
         ) as mock_builder:
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [
-                    AIMessage(content="Task completed with results")
-                ]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={
+                    "messages": [AIMessage(content="Task completed with results")]
+                }
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(dependencies=mock_dependencies)
@@ -202,9 +200,9 @@ class TestExecutionServiceAsyncExecution:
             ai_msg.tool_calls = []
 
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [tool_msg, ai_msg]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={"messages": [tool_msg, ai_msg]}
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(dependencies=mock_dependencies)
@@ -280,9 +278,7 @@ class TestExecutionServiceAgentInitialization:
         When initializing ExecutionService,
         Then RuntimeError should be raised.
         """
-        with patch(
-            "seller_template.xy_archivist.graph.get_model"
-        ) as mock_get_model:
+        with patch("seller_template.xy_archivist.graph.get_model") as mock_get_model:
             mock_llm = MagicMock()
             mock_get_model.return_value = mock_llm
 
@@ -302,9 +298,7 @@ class TestExecutionServiceAgentInitialization:
         mock_deps = MagicMock(spec=DependencyContainer)
         mock_deps.search_tools = [MagicMock()]  # Has tools
 
-        with patch(
-            "seller_template.xy_archivist.graph.get_model"
-        ) as mock_get_model:
+        with patch("seller_template.xy_archivist.graph.get_model") as mock_get_model:
             mock_get_model.side_effect = Exception("API key not configured")
 
             with pytest.raises(RuntimeError) as exc_info:
@@ -344,9 +338,9 @@ class TestExecutionServiceTaskStatus:
             "seller_template.execution_service.ArchivistGraphBuilder"
         ) as mock_builder:
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [AIMessage(content="Done")]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={"messages": [AIMessage(content="Done")]}
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(dependencies=mock_dependencies)
@@ -354,9 +348,7 @@ class TestExecutionServiceTaskStatus:
             request = ExecutionRequest(task_description="Test status")
             result = await service.create_task(request)
 
-            status = await service.get_task_status(
-                result.task_id, result.buyer_secret
-            )
+            status = await service.get_task_status(result.task_id, result.buyer_secret)
 
             assert status is not None
             assert status.task_id == result.task_id
@@ -375,9 +367,9 @@ class TestExecutionServiceTaskStatus:
             "seller_template.execution_service.ArchivistGraphBuilder"
         ) as mock_builder:
             mock_agent = MagicMock()
-            mock_agent.ainvoke = AsyncMock(return_value={
-                "messages": [AIMessage(content="Done")]
-            })
+            mock_agent.ainvoke = AsyncMock(
+                return_value={"messages": [AIMessage(content="Done")]}
+            )
             mock_builder.return_value.agent = mock_agent
 
             service = ExecutionService(dependencies=mock_dependencies)
@@ -385,9 +377,7 @@ class TestExecutionServiceTaskStatus:
             request = ExecutionRequest(task_description="Test wrong secret")
             result = await service.create_task(request)
 
-            status = await service.get_task_status(
-                result.task_id, "wrong-secret"
-            )
+            status = await service.get_task_status(result.task_id, "wrong-secret")
 
             assert status is None
 
@@ -409,9 +399,7 @@ class TestExecutionServiceTaskStatus:
 
             service = ExecutionService(dependencies=mock_dependencies)
 
-            status = await service.get_task_status(
-                "nonexistent-task-id", "some-secret"
-            )
+            status = await service.get_task_status("nonexistent-task-id", "some-secret")
 
             assert status is None
 

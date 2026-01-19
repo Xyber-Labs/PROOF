@@ -139,9 +139,7 @@ class TestAdminLogsEndpoint:
             assert "message" in log_entry, "Log entry missing message"
 
     @pytest.mark.asyncio
-    async def test_admin_logs_timestamp_format(
-        self, api_client: AsyncClient
-    ) -> None:
+    async def test_admin_logs_timestamp_format(self, api_client: AsyncClient) -> None:
         """Verify log timestamps are in ISO 8601 format.
 
         Given the admin logs endpoint,
@@ -163,9 +161,7 @@ class TestAdminLogsEndpoint:
                 pytest.fail(f"Invalid timestamp format: {timestamp}")
 
     @pytest.mark.asyncio
-    async def test_admin_logs_level_values(
-        self, api_client: AsyncClient
-    ) -> None:
+    async def test_admin_logs_level_values(self, api_client: AsyncClient) -> None:
         """Verify log levels are valid values.
 
         Given the admin logs endpoint,
@@ -183,9 +179,7 @@ class TestAdminLogsEndpoint:
             assert level in valid_levels, f"Invalid log level: {level}"
 
     @pytest.mark.asyncio
-    async def test_admin_logs_post_not_allowed(
-        self, api_client: AsyncClient
-    ) -> None:
+    async def test_admin_logs_post_not_allowed(self, api_client: AsyncClient) -> None:
         """Verify POST method is not allowed on admin logs endpoint.
 
         Given the admin logs endpoint,
@@ -213,9 +207,7 @@ class TestAPIRoutesEdgeCases:
         assert response.status_code == 404
 
     @pytest.mark.asyncio
-    async def test_case_sensitive_routes(
-        self, api_client: AsyncClient
-    ) -> None:
+    async def test_case_sensitive_routes(self, api_client: AsyncClient) -> None:
         """Verify routes are case-sensitive.
 
         Given an endpoint path with wrong case,
@@ -229,9 +221,7 @@ class TestAPIRoutesEdgeCases:
         assert response.status_code == 404
 
     @pytest.mark.asyncio
-    async def test_trailing_slash_behavior(
-        self, api_client: AsyncClient
-    ) -> None:
+    async def test_trailing_slash_behavior(self, api_client: AsyncClient) -> None:
         """Verify trailing slash is handled correctly.
 
         Given an endpoint with trailing slash,

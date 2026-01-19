@@ -16,6 +16,10 @@ dependencies = [
     "x402==0.2.1",
     "cdp-sdk>=1.33.2",
     "pyyaml>=6.0",
+    "langchain-core",
+    "langchain-mcp-adapters==0.1.14",
+    "langchain-google-genai",
+    "langchain-together",
 ]
 
 [dependency-groups]

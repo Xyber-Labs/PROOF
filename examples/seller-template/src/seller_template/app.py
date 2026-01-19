@@ -6,25 +6,36 @@ Main responsibility: Compose the FastAPI/MCP application and manage its lifecycl
 
 import asyncio
 import logging
+from collections.abc import Callable
 from contextlib import asynccontextmanager
-from typing import Callable
 
+import httpx
+from xy_market.vendor.mcp_client import (
+    McpClient,
+    McpClientConfig,
+    get_mcp_client,
+    get_mcp_client_config,
+)
+from eth_account import Account
 from fastapi import FastAPI
 from fastmcp import FastMCP
-import httpx
-from eth_account import Account
 from x402.clients.httpx import x402HttpxClient
-
-from content_core_sdk.mcp_client import get_mcp_client, get_mcp_client_config, McpClient, McpClientConfig
+from xy_market.middleware.ratelimit import RateLimitMiddleware
 
 from seller_template.api_routers import routers as api_routers
-from seller_template.config import get_x402_settings, get_settings, get_buyer_x402_settings, BuyerX402Settings
+from seller_template.config import (
+    BuyerX402Settings,
+    get_buyer_x402_settings,
+    get_marketplace_registration_settings,
+    get_settings,
+    get_x402_settings,
+)
 from seller_template.dependencies import DependencyContainer
 from seller_template.execution_service import ExecutionService
 from seller_template.hybrid_routers import routers as hybrid_routers
 from seller_template.mcp_routers import routers as mcp_routers
 from seller_template.middlewares import X402WrapperMiddleware
-from xy_market.middleware.ratelimit import RateLimitMiddleware
+from seller_template.registration import RegistrationService
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +44,8 @@ def _configure_x402_client(
     buyer_x402_settings: BuyerX402Settings,
 ) -> (
     Callable[
-        [dict[str, str] | None, httpx.Timeout | None, httpx.Auth | None], httpx.AsyncClient
+        [dict[str, str] | None, httpx.Timeout | None, httpx.Auth | None],
+        httpx.AsyncClient,
     ]
     | None
 ):
@@ -60,7 +72,9 @@ def _configure_x402_client(
 
         return client_factory
     except ImportError:
-        logger.warning("eth_account or x402 not installed, cannot configure x402 client")
+        logger.warning(
+            "eth_account or x402 not installed, cannot configure x402 client"
+        )
     except Exception as e:
         logger.error(f"Failed to configure x402 client: {e}")
     return None
@@ -78,11 +92,15 @@ def _configure_mcp_client(
 ) -> McpClient | None:
     """Configures and returns the MCP client."""
     if mcp_config.servers:
-        mcp_client = get_mcp_client(mcp_config, httpx_client_factory=httpx_client_factory)
+        mcp_client = get_mcp_client(
+            mcp_config, httpx_client_factory=httpx_client_factory
+        )
         logger.info(f"Initialized MCP client with {len(mcp_config.servers)} servers")
         return mcp_client
     else:
-        logger.warning("No MCP servers configured (MCP_SERVERS__* environment variables). Continuing without MCP support.")
+        logger.warning(
+            "No MCP servers configured (MCP_SERVERS__* environment variables). Continuing without MCP support."
+        )
         return None
 
 
@@ -108,7 +126,7 @@ async def app_lifespan(app: FastAPI):
 
     # Configure x402 client for buyer capabilities
     httpx_client_factory = _configure_x402_client(buyer_x402_settings)
-    
+
     # Configure MCP client for connecting to external MCP servers
     mcp_client = _configure_mcp_client(mcp_config, httpx_client_factory)
 
@@ -124,6 +142,17 @@ async def app_lifespan(app: FastAPI):
     # Store in app state
     app.state.dependencies = dependencies
     app.state.execution_service = execution_service
+
+    # Auto-register with marketplace
+    registration_settings = get_marketplace_registration_settings()
+    registration_service = RegistrationService(registration_settings)
+    registration_success = await registration_service.register()
+
+    if not registration_success and registration_settings.enabled:
+        logger.warning(
+            "Failed to register with marketplace. "
+            "Seller will continue running but may not be discoverable."
+        )
 
     # Start background task cleanup (runs every 10 minutes)
     async def cleanup_loop():

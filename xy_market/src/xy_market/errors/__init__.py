@@ -2,12 +2,12 @@
 
 from xy_market.errors.codes import ErrorCode
 from xy_market.errors.exceptions import (
-    MarketplaceError,
-    RateLimitError,
     AgentNotFoundError,
-    InvalidPaymentProofError,
     ExecutionFailedError,
+    InvalidPaymentProofError,
+    MarketplaceError,
     NegotiationExhaustedError,
+    RateLimitError,
 )
 
 __all__ = [
@@ -19,4 +19,3 @@ __all__ = [
     "ExecutionFailedError",
     "NegotiationExhaustedError",
 ]
-

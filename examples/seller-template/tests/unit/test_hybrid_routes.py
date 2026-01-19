@@ -4,10 +4,10 @@ import pytest
 import pytest_asyncio
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
+from xy_market.models.execution import ExecutionRequest
 
 from seller_template.hybrid_routers.execute_router import router as execute_router
 from seller_template.hybrid_routers.tasks_router import router as tasks_router
-from xy_market.models.execution import ExecutionRequest
 
 
 @pytest_asyncio.fixture
@@ -24,10 +24,14 @@ async def hybrid_client() -> AsyncClient:
 
 
 @pytest.mark.asyncio
-async def test_execute_endpoint_requires_execution_service(hybrid_client: AsyncClient) -> None:
+async def test_execute_endpoint_requires_execution_service(
+    hybrid_client: AsyncClient,
+) -> None:
     """Test that /execute endpoint requires execution service in app state."""
     execution_request = ExecutionRequest(task_description="Test task")
-    response = await hybrid_client.post("/hybrid/execute", json=execution_request.model_dump())
+    response = await hybrid_client.post(
+        "/hybrid/execute", json=execution_request.model_dump()
+    )
     # Should fail with 500 since execution_service is not in app state
     assert response.status_code == 500
 

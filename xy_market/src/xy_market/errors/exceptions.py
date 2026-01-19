@@ -34,9 +34,6 @@ class AgentAlreadyRegisteredError(MarketplaceError):
         super().__init__(message, ErrorCode.AGENT_ALREADY_REGISTERED)
 
 
-
-
-
 class InvalidPaymentProofError(MarketplaceError):
     """Invalid payment proof error."""
 

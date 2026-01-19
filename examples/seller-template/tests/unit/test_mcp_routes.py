@@ -8,11 +8,13 @@ from __future__ import annotations
 
 import pytest
 import pytest_asyncio
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from seller_template.mcp_routers.analysis import get_analysis, router as analysis_router
-from seller_template.mcp_routers.hello_robot import hello_robot, router as hello_router
+from seller_template.mcp_routers.analysis import get_analysis
+from seller_template.mcp_routers.analysis import router as analysis_router
+from seller_template.mcp_routers.hello_robot import hello_robot
+from seller_template.mcp_routers.hello_robot import router as hello_router
 
 
 class TestHelloRobotFunction:
@@ -143,7 +145,9 @@ class TestMCPRoutesViaHTTP:
         app.include_router(analysis_router, prefix="/mcp")
 
         transport = ASGITransport(app=app)
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             yield client
 
     @pytest.mark.asyncio
@@ -178,8 +182,7 @@ class TestMCPRoutesViaHTTP:
         Then it should return analysis result.
         """
         response = await mcp_client.post(
-            "/mcp/analysis",
-            params={"input_data": "test data"}
+            "/mcp/analysis", params={"input_data": "test data"}
         )
         assert response.status_code == 200
         result = response.json()

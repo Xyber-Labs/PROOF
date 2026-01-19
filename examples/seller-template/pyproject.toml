@@ -21,13 +21,14 @@ dependencies = [
     "pydantic-settings>=2.0",
     "httpx>=0.25.0",
     "tenacity>=8.2.3",
-    "x402==0.2.1",  # xy_market subdeps, todo remove
-    "cdp-sdk>=1.33.2",  # xy_market subdeps, todo remove
     "pyyaml>=6.0",
-    "content_core_sdk >= 1.14.23",
     "xy_market",
     "langgraph",
     "langchain-core",
+    "langchain-mcp-adapters==0.1.14",
+    "langchain-google-genai",
+    "langchain-together",
+    "fastmcp>=2.0.0",
 ]
 
 [dependency-groups]
@@ -47,12 +48,7 @@ debug = [
 
 
 [tool.uv.sources]
-xy_market = { path = "../xy_market", editable = true }
-"content_core_sdk" = { index = "gitlab" }
-
-[[tool.uv.index]]
-name = "gitlab"
-url = "https://gitlab.xyb-dev.com/api/v4/projects/48/packages/pypi/simple"
+xy_market = { path = "../../xy_market", editable = true }
 
 
 [build-system]

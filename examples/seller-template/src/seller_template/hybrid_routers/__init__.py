@@ -7,11 +7,7 @@ Main responsibility: Collect hybrid (REST + MCP) FastAPI routers into a single l
 from fastapi import APIRouter
 
 from .execute_router import router as execute_router
-from .tasks_router import router as tasks_router
 from .pricing import router as pricing_router
+from .tasks_router import router as tasks_router
 
-routers: list[APIRouter] = [
-    execute_router,
-    tasks_router,
-    pricing_router
-]
+routers: list[APIRouter] = [execute_router, tasks_router, pricing_router]

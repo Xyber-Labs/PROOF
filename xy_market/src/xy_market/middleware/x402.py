@@ -30,7 +30,8 @@ ID_TO_NETWORK_NAME = {int(v): k for k, v in NETWORK_TO_ID.items()}
 
 
 class X402PaymentMiddleware(BaseHTTPMiddleware):
-    """x402 payment enforcement middleware for Seller agents.
+    """
+    x402 payment enforcement middleware for Seller agents.
 
     Similar to mcp-server-template's X402WrapperMiddleware, but reusable
     for any Seller agent endpoint.
@@ -45,12 +46,14 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
         tool_pricing: dict[str, list[PaymentOption]],
         settings: SellerX402Config | None = None,
     ):
-        """Initialize x402 payment middleware.
+        """
+        Initialize x402 payment middleware.
 
         Args:
             app: FastAPI/Starlette application
             tool_pricing: Pricing configuration mapping operation_id to payment options
             facilitator_config: x402 facilitator configuration (None for mock/test mode)
+
         """
         super().__init__(app)
         self.tool_pricing = tool_pricing
@@ -74,13 +77,19 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
             # No pricing configured for this endpoint - allow through
             return await call_next(request)
 
-        payment_requirements = self._build_payment_requirements(pricing_options, request)
+        payment_requirements = self._build_payment_requirements(
+            pricing_options, request
+        )
 
         # Check for payment header
-        payment_header = request.headers.get("X-PAYMENT") or request.headers.get("X-Payment-Proof")
+        payment_header = request.headers.get("X-PAYMENT") or request.headers.get(
+            "X-Payment-Proof"
+        )
         if not payment_header:
             logger.warning(f"Payment header missing for '{operation_id}'")
-            return self._create_402_response(payment_requirements, "No X-PAYMENT header provided")
+            return self._create_402_response(
+                payment_requirements, "No X-PAYMENT header provided"
+            )
 
         # Parse payment header
         try:
@@ -93,7 +102,9 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
             payment = PaymentPayload(**payment_dict)
         except Exception as e:
             logger.warning(f"Invalid payment header from {request.client.host}: {e}")
-            return self._create_402_response(payment_requirements, "Invalid payment header format")
+            return self._create_402_response(
+                payment_requirements, "Invalid payment header format"
+            )
 
         # Find matching payment requirement
         selected_req = find_matching_payment_requirements(payment_requirements, payment)
@@ -115,12 +126,15 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
                 f"Payment verification failed after {self.FACILITATOR_VERIFY_MAX_RETRIES} attempts for '{operation_id}': {exc}"
             )
             return self._create_402_response(
-                payment_requirements, "Payment verification failed; please try again later."
+                payment_requirements,
+                "Payment verification failed; please try again later.",
             )
 
         if not verify_response.is_valid:
             reason = verify_response.invalid_reason or "Unknown reason"
-            return self._create_402_response(payment_requirements, f"Invalid payment: {reason}")
+            return self._create_402_response(
+                payment_requirements, f"Invalid payment: {reason}"
+            )
 
         # Payment valid - proceed with request
         response = await call_next(request)
@@ -135,7 +149,9 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
                     ).decode("utf-8")
                 else:
                     reason = settle_response.error_reason or "Unknown"
-                    logger.error(f"Payment settlement failed for '{operation_id}': {reason}")
+                    logger.error(
+                        f"Payment settlement failed for '{operation_id}': {reason}"
+                    )
             except Exception as e:
                 logger.error(f"Exception during settlement for '{operation_id}': {e}")
 
@@ -155,10 +171,14 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
                 return await self.facilitator.verify(payment, payment_requirements)
             except httpx.HTTPError as exc:
                 last_error = exc
-                logger.warning(f"Facilitator verify attempt {attempt}/{max_retries} failed: {exc}")
+                logger.warning(
+                    f"Facilitator verify attempt {attempt}/{max_retries} failed: {exc}"
+                )
                 if attempt < max_retries:
                     delay = retry_delay_seconds * (2 ** (attempt - 1))
-                    logger.info(f"Retrying payment verification in {delay:.1f} seconds...")
+                    logger.info(
+                        f"Retrying payment verification in {delay:.1f} seconds..."
+                    )
                     await asyncio.sleep(delay)
         assert last_error is not None
         raise last_error
@@ -177,7 +197,11 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
     async def _get_operation_id(self, request: Request) -> str | None:
         """Get operation ID from request (endpoint path or MCP tool name)."""
         path = request.url.path
-        if path.startswith("/api/") or path.startswith("/hybrid/") or path.startswith("/execute"):
+        if (
+            path.startswith("/api/")
+            or path.startswith("/hybrid/")
+            or path.startswith("/execute")
+        ):
             # Extract from path or route
             for route in request.app.routes:
                 match, _ = route.matches(request.scope)
@@ -229,4 +253,3 @@ class X402PaymentMiddleware(BaseHTTPMiddleware):
                 )
             )
         return accepts
-

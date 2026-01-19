@@ -21,11 +21,12 @@ def validate_https_url(url_str: str) -> bool:
         if parsed.scheme == "http":
             # Allow HTTP for localhost, docker service names (no dots), or .local domains
             hostname = parsed.hostname or ""
-            if hostname in ("localhost", "127.0.0.1", "0.0.0.0") or \
-               (not "." in hostname and hostname) or \
-               hostname.endswith(".local"):
+            if (
+                hostname in ("localhost", "127.0.0.1", "0.0.0.0")
+                or ("." not in hostname and hostname)
+                or hostname.endswith(".local")
+            ):
                 return bool(parsed.netloc)
         return parsed.scheme == "https" and bool(parsed.netloc)
     except Exception:
         return False
-

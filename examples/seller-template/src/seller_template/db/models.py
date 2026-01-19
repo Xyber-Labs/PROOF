@@ -1,9 +1,8 @@
 import datetime
-from typing import Any
 import uuid
+from typing import Any
 
 from pydantic import BaseModel, Field
-
 from xy_market.models.execution import ExecutionRequest, ExecutionResult
 
 
@@ -27,7 +26,7 @@ class Task(BaseModel):
         data = self.result if self.result else {}
         if isinstance(data, dict) and "tools_used" not in data:
             data["tools_used"] = self.tools_used
-        
+
         return ExecutionResult(
             task_id=self.task_id,
             buyer_secret=self.buyer_secret,

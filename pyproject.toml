@@ -1,0 +1,75 @@
+[project]
+name = "proof-e2e-tests"
+version = "0.1.0"
+description = "End-to-end tests for PROOF Agent Swarms ecosystem"
+authors = [
+    { name = "XyAgent", email = "agent@xyber.inc" },
+]
+requires-python = "==3.12.*"
+
+dependencies = [
+    "httpx>=0.25.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "eth-account>=0.10.0",
+    "x402==0.2.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "pytest-bdd>=7.0.0",
+    "ruff>=0.1.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+# This is a test-only project, include the tests directory
+packages = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+select = ["E", "F", "I", "W", "C90", "N", "UP", "B", "S"]
+ignore = ["D100", "D104", "D107", "D203", "D212", "S101"]
+exclude = [".git", "__pycache__", ".venv", "build", "dist"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = ["S101", "D"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "module"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "-v",
+    "-s",
+]
+markers = [
+    "e2e: marks tests as end-to-end tests (require running services)",
+    "integration: marks tests as integration tests",
+    "slow: marks tests as slow",
+]
+
+# pytest-bdd configuration
+# Feature files location - pytest-bdd looks here for .feature files
+bdd_features_base_dir = "tests/e2e/features"
+
+# Step definitions are auto-discovered from conftest.py and step modules
+# The conftest.py imports all step modules to make them available

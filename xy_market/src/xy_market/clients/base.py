@@ -20,7 +20,8 @@ class BaseClient:
         timeout: float = 30.0,
         max_retries: int = 3,
     ):
-        """Initialize base client.
+        """
+        Initialize base client.
 
         Args:
             base_url: Base URL for API
@@ -28,6 +29,7 @@ class BaseClient:
                 Can be httpx.AsyncClient or x402HttpxClient for automatic payment handling.
             timeout: Request timeout in seconds
             max_retries: Maximum number of retries
+
         """
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
@@ -85,15 +87,18 @@ class BaseClient:
         """GET request."""
         return await self._request("GET", path, **kwargs)
 
-    async def post(self, path: str, json: dict[str, Any] | None = None, **kwargs) -> httpx.Response:
+    async def post(
+        self, path: str, json: dict[str, Any] | None = None, **kwargs
+    ) -> httpx.Response:
         """POST request."""
         return await self._request("POST", path, json=json, **kwargs)
 
-    async def put(self, path: str, json: dict[str, Any] | None = None, **kwargs) -> httpx.Response:
+    async def put(
+        self, path: str, json: dict[str, Any] | None = None, **kwargs
+    ) -> httpx.Response:
         """PUT request."""
         return await self._request("PUT", path, json=json, **kwargs)
 
     async def delete(self, path: str, **kwargs) -> httpx.Response:
         """DELETE request."""
         return await self._request("DELETE", path, **kwargs)
-

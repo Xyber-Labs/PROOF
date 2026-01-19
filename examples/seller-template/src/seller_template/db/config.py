@@ -10,5 +10,6 @@ class DatabaseSettings(BaseSettings):
     # For in-memory, we don't need a specific URL, but this serves as a placeholder
     database_url: str = ""
 
+
 def get_database_settings() -> DatabaseSettings:
     return DatabaseSettings()

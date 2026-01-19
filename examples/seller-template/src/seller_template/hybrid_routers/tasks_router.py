@@ -1,7 +1,6 @@
 import logging
 
 from fastapi import APIRouter, Header, HTTPException, Request, status
-
 from xy_market.models.execution import ExecutionResult
 
 from seller_template.execution_service import ExecutionService
@@ -10,11 +9,14 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+
 @router.get("/tasks/{task_id}", status_code=status.HTTP_200_OK)
 async def get_task_status(
     task_id: str,
     request: Request,
-    x_buyer_secret: str = Header(..., alias="X-Buyer-Secret", description="Buyer secret for task access"),
+    x_buyer_secret: str = Header(
+        ..., alias="X-Buyer-Secret", description="Buyer secret for task access"
+    ),
 ) -> ExecutionResult:
     """Poll task status using task_id and buyer_secret."""
     execution_service: ExecutionService = request.app.state.execution_service

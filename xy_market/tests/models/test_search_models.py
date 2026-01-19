@@ -1,5 +1,5 @@
+
 import pytest
-from datetime import datetime, timedelta
 
 from xy_market.models.search import SearchRequest, SearchResponse, SellerProfile
 
@@ -19,24 +19,18 @@ def test_search_request_validation():
         task_description="Find news articles",
         tags=["news", "ai"],
         limit=5,
-        budget_range=(10.0, 100.0)
+        budget_range=(10.0, 100.0),
     )
     assert request_with_details.tags == ["news", "ai"]
     assert request_with_details.budget_range == (10.0, 100.0)
 
     # Test invalid budget_range (max < min)
     with pytest.raises(ValueError, match="must be >= min"):
-        SearchRequest(
-            task_description="Test",
-            budget_range=(100.0, 10.0)
-        )
+        SearchRequest(task_description="Test", budget_range=(100.0, 10.0))
 
     # Test invalid budget_range (min < 0)
     with pytest.raises(ValueError, match="must be >= 0"):
-        SearchRequest(
-            task_description="Test",
-            budget_range=(-1.0, 10.0)
-        )
+        SearchRequest(task_description="Test", budget_range=(-1.0, 10.0))
 
 
 def test_seller_profile_validation():
@@ -82,7 +76,7 @@ def test_search_response_validation():
             registered_at="2024-01-01T00:00:00Z",
         )
     ]
-    
+
     response = SearchResponse(
         sellers=sellers,
         search_id="550e8400-e29b-41d4-a716-446655440000",

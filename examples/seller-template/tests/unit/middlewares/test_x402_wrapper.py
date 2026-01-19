@@ -10,7 +10,6 @@ import base64
 import json
 from types import SimpleNamespace
 from typing import Any
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 import pytest_asyncio
@@ -22,7 +21,6 @@ from x402.types import PaymentPayload, PaymentRequirements, x402PaymentRequiredR
 
 from seller_template.config import PaymentOption
 from seller_template.middlewares import X402WrapperMiddleware
-
 
 # ============================================================================
 # Test Fixtures
@@ -236,7 +234,8 @@ class TestX402ValidPayment:
 
     @pytest.mark.asyncio
     async def test_valid_payment_header_allows_request_and_sets_response_header(
-        self, payment_app,
+        self,
+        payment_app,
     ) -> None:
         """Verify valid payment allows request with response header.
 
@@ -273,7 +272,8 @@ class TestX402ValidPayment:
 
     @pytest.mark.asyncio
     async def test_valid_payment_calls_facilitator_verify(
-        self, payment_app,
+        self,
+        payment_app,
     ) -> None:
         """Verify payment flow calls facilitator verify.
 
@@ -300,7 +300,8 @@ class TestX402ValidPayment:
 
     @pytest.mark.asyncio
     async def test_valid_payment_calls_facilitator_settle(
-        self, payment_app,
+        self,
+        payment_app,
     ) -> None:
         """Verify payment flow calls facilitator settle after verify.
 
@@ -331,7 +332,8 @@ class TestX402NetworkMismatch:
 
     @pytest.mark.asyncio
     async def test_payment_header_with_wrong_network_returns_no_matching(
-        self, payment_app,
+        self,
+        payment_app,
     ) -> None:
         """Verify wrong network in payment returns no matching.
 
@@ -359,9 +361,13 @@ class TestX402NetworkMismatch:
         # Decode, modify network, and re-encode
         raw = json.loads(base64.b64decode(header_value).decode("utf-8"))
         raw["network"] = "base-sepolia"  # mismatch the configured "base"
-        tampered_header = base64.b64encode(json.dumps(raw).encode("utf-8")).decode("utf-8")
+        tampered_header = base64.b64encode(json.dumps(raw).encode("utf-8")).decode(
+            "utf-8"
+        )
 
-        resp = await client.post("/hybrid/forecast", headers={"X-PAYMENT": tampered_header})
+        resp = await client.post(
+            "/hybrid/forecast", headers={"X-PAYMENT": tampered_header}
+        )
         assert resp.status_code == 402
         payload = resp.json()
         assert payload["error"] == "No matching payment requirements found"
@@ -382,8 +388,7 @@ class TestX402VerificationFailure:
         """
         facilitator = DummyFacilitator()
         facilitator.verify_response = SimpleNamespace(
-            is_valid=False,
-            invalid_reason="Insufficient funds"
+            is_valid=False, invalid_reason="Insufficient funds"
         )
 
         settings = SimpleNamespace(
@@ -408,7 +413,9 @@ class TestX402VerificationFailure:
         app.add_middleware(X402WrapperMiddleware, tool_pricing=pricing)
 
         transport = ASGITransport(app=app)
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             # Get payment requirements
             resp_402 = await client.post("/hybrid/forecast")
             body = resp_402.json()
@@ -423,7 +430,9 @@ class TestX402VerificationFailure:
             )
 
             # Should fail verification
-            resp = await client.post("/hybrid/forecast", headers={"X-PAYMENT": header_value})
+            resp = await client.post(
+                "/hybrid/forecast", headers={"X-PAYMENT": header_value}
+            )
             assert resp.status_code == 402
             payload = resp.json()
             assert "Invalid payment" in payload["error"]
@@ -435,7 +444,8 @@ class TestX402FreeEndpoints:
 
     @pytest.mark.asyncio
     async def test_free_endpoint_does_not_require_payment(
-        self, payment_app,
+        self,
+        payment_app,
     ) -> None:
         """Verify non-priced endpoints work without payment.
 
@@ -481,7 +491,9 @@ class TestX402DisabledMiddleware:
         app.add_middleware(X402WrapperMiddleware, tool_pricing=pricing)
 
         transport = ASGITransport(app=app)
-        async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        async with AsyncClient(
+            transport=transport, base_url="http://testserver"
+        ) as client:
             response = await client.post("/hybrid/forecast")
             # Should pass through without requiring payment
             assert response.status_code == 200

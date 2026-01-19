@@ -7,8 +7,8 @@ x-qdrant-config: &qdrant-config
 services:
   search_engine:
     build:
-      context: ./search_engine
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: search-engine/Dockerfile
       target: dev
     image: search_engine_img_debug
     container_name: search_engine_cnt_debug
@@ -18,14 +18,14 @@ services:
       - "8000:8000"
       - "5670:5670"
     volumes:
-      - ./search_engine/src/search_engine:/app/search_engine:ro
-      - ./xy_market/src/xy_market:/app/xy_market:ro
-    env_file: ./search_engine/.env
+      - ./search-engine/src/search_engine:/app/search_engine/src/search_engine:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
+    env_file: ./search-engine/.env
     restart: unless-stopped
   marketplace:
     build:
-      context: ./marketplace
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: marketplace/Dockerfile
       target: dev
     image: marketplace_img_debug
     container_name: marketplace_cnt_debug
@@ -35,14 +35,14 @@ services:
       - "8001:8001"
       - "5671:5671"
     volumes:
-      - ./marketplace/src/marketplace:/app/marketplace:ro
-      - ./xy_market/src/xy_market:/app/xy_market:ro
+      - ./marketplace/src/marketplace:/app/marketplace/src/marketplace:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
     env_file: ./marketplace/.env
     restart: unless-stopped
   seller_tavily:
     build:
-      context: ./seller_template
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: examples/seller-template/Dockerfile
       target: dev
     image: seller_img_debug
     container_name: seller_tavily_debug
@@ -53,10 +53,10 @@ services:
       - "8002:8002"
       - "5672:5672"
     volumes:
-      - ./seller_template/src/seller_template:/app/seller_template:ro
-      - ./xy_market/src/xy_market:/app/xy_market:ro
+      - ./examples/seller-template/src/seller_template:/app/examples/seller-template/src/seller_template:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
       - ../content-core-sdk/content_core_sdk:/app/content_core_sdk:ro
-    env_file: ./seller_template/.env
+    env_file: ./examples/seller-template/.env
     environment:
       - SELLER_DESCRIPTION="I provide tavily web search retrieval services"
       #- MCP_SERVERS__TAVILY_WEB_SEARCH__URL=https://dev.ai-mcp-tavily.xyb-dev.com/mcp-server/mcp/
@@ -82,8 +82,8 @@ services:
     environment: {}
   seller_arxiv:
     build:
-      context: ./seller_template
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: examples/seller-template/Dockerfile
       target: dev
     image: seller_img_debug
     container_name: seller_arxiv_debug
@@ -94,10 +94,10 @@ services:
       - "8004:8004"
       - "5673:5673"
     volumes:
-      - ./seller_template/src/seller_template:/app/seller_template:ro
-      - ./xy_market/src/xy_market:/app/xy_market:ro
+      - ./examples/seller-template/src/seller_template:/app/examples/seller-template/src/seller_template:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
       - ../content-core-sdk/content_core_sdk:/app/content_core_sdk:ro
-    env_file: ./seller_template/.env
+    env_file: ./examples/seller-template/.env
     environment:
       - SELLER_DESCRIPTION="I provide arXiv article retrieval services"
       #- MCP_SERVERS__ARXIV_WEB_SEARCH__URL=https://dev.ai-mcp-arxiv.xyb-dev.com/mcp-server/mcp/
@@ -123,8 +123,8 @@ services:
     environment: {}
   buyer:
     build:
-      context: ./buyer_example
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: examples/buyer-template/Dockerfile
       target: dev
     image: buyer_img_debug
     container_name: buyer_cnt_debug
@@ -134,9 +134,9 @@ services:
       - "8006:8006"
       - "5674:5674"
     volumes:
-      - ./buyer_example/src/buyer_example:/app/buyer_example:ro
-      - ./xy_market/src/xy_market:/app/xy_market:ro
-    env_file: ./buyer_example/.env
+      - ./examples/buyer-template/src/buyer_example:/app/examples/buyer-template/src/buyer_example:ro
+      - ./xy_market/src/xy_market:/app/xy_market/src/xy_market:ro
+    env_file: ./examples/buyer-template/.env
     restart: unless-stopped
   qdrant:
     image: qdrant/qdrant:latest

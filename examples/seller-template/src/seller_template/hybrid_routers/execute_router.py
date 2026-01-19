@@ -1,7 +1,6 @@
 import logging
 
 from fastapi import APIRouter, HTTPException, Request, status
-
 from xy_market.models.execution import ExecutionRequest
 
 from seller_template.config import get_settings
@@ -10,6 +9,7 @@ from seller_template.execution_service import ExecutionService
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
 
 @router.post(
     "/execute",

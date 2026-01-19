@@ -1,8 +1,9 @@
 """Tests for RateLimitMiddleware."""
 
 import time
+
 import pytest
-from fastapi import FastAPI, status
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from xy_market.middleware.ratelimit import RateLimitMiddleware
@@ -12,24 +13,20 @@ from xy_market.middleware.ratelimit import RateLimitMiddleware
 def app():
     """Create test app with rate limiting."""
     app = FastAPI()
-    
+
     # Configure limits: 2 req/min for /limited, 5 req/min for /tasks
-    limits = {
-        "/limited": 2,
-        "/tasks": 5,
-        r"^/tasks/.*": 5
-    }
-    
+    limits = {"/limited": 2, "/tasks": 5, r"^/tasks/.*": 5}
+
     app.add_middleware(RateLimitMiddleware, limits=limits, window_seconds=1)
-    
+
     @app.get("/limited")
     async def limited():
         return {"status": "ok"}
-        
+
     @app.get("/unlimited")
     async def unlimited():
         return {"status": "ok"}
-        
+
     @app.get("/tasks/{task_id}")
     async def get_task(task_id: str):
         return {"task_id": task_id}
@@ -48,11 +45,11 @@ def test_rate_limit_enforced(client):
     # First request - OK
     response = client.get("/limited")
     assert response.status_code == 200
-    
+
     # Second request - OK
     response = client.get("/limited")
     assert response.status_code == 200
-    
+
     # Third request - Exceeded
     response = client.get("/limited")
     assert response.status_code == 429
@@ -65,10 +62,10 @@ def test_rate_limit_reset(client):
     client.get("/limited")
     client.get("/limited")
     assert client.get("/limited").status_code == 429
-    
+
     # Wait for window to pass
     time.sleep(1.1)
-    
+
     # Should be OK again
     response = client.get("/limited")
     assert response.status_code == 200
@@ -84,14 +81,13 @@ def test_unlimited_endpoint(client):
 def test_buyer_secret_key(client):
     """Test rate limiting by buyer secret."""
     headers = {"X-Buyer-Secret": "secret1"}
-    
+
     # Exhaust limit for secret1
     for _ in range(5):
         assert client.get("/tasks/123", headers=headers).status_code == 200
-        
+
     assert client.get("/tasks/123", headers=headers).status_code == 429
-    
+
     # secret2 should still work
     headers2 = {"X-Buyer-Secret": "secret2"}
     assert client.get("/tasks/123", headers=headers2).status_code == 200
-

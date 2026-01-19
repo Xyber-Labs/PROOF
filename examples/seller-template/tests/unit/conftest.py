@@ -11,10 +11,8 @@ from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-import pytest_asyncio
 
 from seller_template.db.database import close_database
-
 
 # ============================================================================
 # Database Fixtures
@@ -166,11 +164,13 @@ def mock_compiled_graph() -> MagicMock:
         MagicMock configured to return successful task completion.
     """
     mock = MagicMock()
-    mock.ainvoke = AsyncMock(return_value={
-        "messages": [
-            MagicMock(content="Task completed successfully", tool_calls=[])
-        ]
-    })
+    mock.ainvoke = AsyncMock(
+        return_value={
+            "messages": [
+                MagicMock(content="Task completed successfully", tool_calls=[])
+            ]
+        }
+    )
     return mock
 
 
@@ -202,9 +202,7 @@ def mock_graph_with_tool_calls() -> MagicMock:
     ai_msg.tool_calls = []
 
     mock = MagicMock()
-    mock.ainvoke = AsyncMock(return_value={
-        "messages": [tool_msg, ai_msg]
-    })
+    mock.ainvoke = AsyncMock(return_value={"messages": [tool_msg, ai_msg]})
     return mock
 
 
@@ -244,10 +242,7 @@ def mock_failing_facilitator() -> MagicMock:
     """
     facilitator = MagicMock()
 
-    verify_result = SimpleNamespace(
-        is_valid=False,
-        invalid_reason="Insufficient funds"
-    )
+    verify_result = SimpleNamespace(is_valid=False, invalid_reason="Insufficient funds")
     facilitator.verify = AsyncMock(return_value=verify_result)
 
     return facilitator

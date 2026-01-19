@@ -10,7 +10,6 @@ import uuid
 
 import pytest
 import pytest_asyncio
-
 from xy_market.models.execution import ExecutionRequest, ExecutionResult
 
 from seller_template.task_repository import TaskRepository
@@ -203,7 +202,11 @@ class TestTaskRepositoryUpdate:
         result = await task_repository.get_task(task_id, buyer_secret)
         assert result is not None
         assert result.status == "done"
-        assert result.data == {"result": "success", "output": "test output", "tools_used": []}
+        assert result.data == {
+            "result": "success",
+            "output": "test output",
+            "tools_used": [],
+        }
         assert result.execution_time_ms == 150
 
     @pytest.mark.asyncio
@@ -299,7 +302,8 @@ class TestTaskRepositoryCleanup:
         """
         request = ExecutionRequest(task_description="Test cleanup")
         task_id, buyer_secret = await task_repository.create_task(
-            request, deadline_seconds=-1  # Already expired
+            request,
+            deadline_seconds=-1,  # Already expired
         )
 
         cleaned = await task_repository.cleanup_expired_tasks()
@@ -323,7 +327,8 @@ class TestTaskRepositoryCleanup:
         """
         request = ExecutionRequest(task_description="Test active task")
         task_id, buyer_secret = await task_repository.create_task(
-            request, deadline_seconds=3600  # 1 hour from now
+            request,
+            deadline_seconds=3600,  # 1 hour from now
         )
 
         cleaned = await task_repository.cleanup_expired_tasks()
@@ -345,7 +350,8 @@ class TestTaskRepositoryCleanup:
         """
         request = ExecutionRequest(task_description="Test completed task")
         task_id, buyer_secret = await task_repository.create_task(
-            request, deadline_seconds=-1  # Already expired
+            request,
+            deadline_seconds=-1,  # Already expired
         )
         # Mark as done before cleanup
         await task_repository.update_task(
@@ -436,9 +442,7 @@ class TestTaskRepositoryEdgeCases:
         When creating a task,
         Then the task should be created successfully.
         """
-        request = ExecutionRequest(
-            task_description="Test with unicode chars"
-        )
+        request = ExecutionRequest(task_description="Test with unicode chars")
         task_id, buyer_secret = await task_repository.create_task(request)
 
         result = await task_repository.get_task(task_id, buyer_secret)
@@ -457,8 +461,7 @@ class TestTaskRepositoryEdgeCases:
         import asyncio
 
         requests = [
-            ExecutionRequest(task_description=f"Concurrent task {i}")
-            for i in range(10)
+            ExecutionRequest(task_description=f"Concurrent task {i}") for i in range(10)
         ]
 
         results = await asyncio.gather(

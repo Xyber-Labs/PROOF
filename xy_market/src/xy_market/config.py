@@ -22,8 +22,9 @@ class PaymentOption(BaseModel):
 
 
 class SellerX402Config(BaseSettings):
-    """Configuration for sellers using x402 payment protocol.
-    
+    """
+    Configuration for sellers using x402 payment protocol.
+
     Sellers need facilitator configuration to verify payments from buyers.
     This config is used when an agent acts as a seller (receiving payments).
     """
@@ -79,16 +80,19 @@ class SellerX402Config(BaseSettings):
                 logger.info(f"Loaded pricing for {len(validated)} tools.")
                 return validated
         except (yaml.YAMLError, TypeError, ValueError) as exc:
-            logger.error(f"Failed to parse pricing config '{self.pricing_config_path}': {exc}")
+            logger.error(
+                f"Failed to parse pricing config '{self.pricing_config_path}': {exc}"
+            )
             return {}
 
 
 class BuyerX402Config(BaseSettings):
-    """Configuration for buyers using x402 payment protocol.
-    
+    """
+    Configuration for buyers using x402 payment protocol.
+
     Buyers need a wallet private key to make payments to sellers or MCP servers.
     This config is used when an agent acts as a buyer (e.g., Seller agents paying for MCP tools).
-    
+
     Note: Facilitator configuration is only needed by sellers (for payment verification).
     Buyers only need their wallet private key to sign and send payments.
     """
@@ -119,7 +123,7 @@ class AppSettings(BaseSettings):
     logging_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
 
-@lru_cache()
+@lru_cache
 def get_app_settings() -> AppSettings:
     return AppSettings()
 
@@ -134,5 +138,3 @@ def get_seller_x402_settings() -> SellerX402Config:
 def get_buyer_x402_settings() -> BuyerX402Config:
     """Get buyer x402 settings for making payments."""
     return BuyerX402Config()
-
-

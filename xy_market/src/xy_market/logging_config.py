@@ -1,4 +1,3 @@
-import logging
 from logging.config import dictConfig
 
 from xy_market.config import get_app_settings

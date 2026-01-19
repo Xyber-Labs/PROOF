@@ -18,25 +18,27 @@ logger = logging.getLogger(__name__)
 
 
 class SellerClient(BaseClient):
-    """HTTP client for direct Seller communication with x402 payment flow.
-    
+    """
+    HTTP client for direct Seller communication with x402 payment flow.
+
     This client REQUIRES x402HttpxClient for automatic payment handling.
     x402HttpxClient automatically handles 402 Payment Required responses by:
     1. Parsing the invoice from the 402 response
     2. Creating a payment transaction
     3. Retrying the request with the X-PAYMENT header
-    
+
     Example:
         from eth_account import Account
         from x402.clients.httpx import x402HttpxClient
         from xy_market.clients.seller import SellerClient
-        
+
         account = Account.from_key(private_key)
         x402_client = x402HttpxClient(account=account, base_url=seller_url)
         seller_client = SellerClient(base_url=seller_url, http_client=x402_client)
-        
+
         # Execute task - payment handled automatically
         result = await seller_client.execute_task(execution_request)
+
     """
 
     def __init__(
@@ -45,22 +47,25 @@ class SellerClient(BaseClient):
         http_client: x402HttpxClient,
         timeout: float = 60.0,
     ):
-        """Initialize Seller client.
+        """
+        Initialize Seller client.
 
         Args:
             base_url: Seller's base URL (HTTPS)
             http_client: x402HttpxClient for automatic payment handling (required).
                 This client is tightly coupled to x402 protocol and REQUIRES x402HttpxClient.
-                Example:
+
+        Example:
                     from eth_account import Account
                     from x402.clients.httpx import x402HttpxClient
                     account = Account.from_key(private_key)
                     x402_client = x402HttpxClient(account=account, base_url=base_url)
                     seller_client = SellerClient(base_url, http_client=x402_client)
             timeout: Request timeout in seconds (default 60s for execution)
-            
+
         Raises:
             TypeError: If http_client is not an instance of x402HttpxClient
+
         """
         if not isinstance(http_client, x402HttpxClient):
             raise TypeError(
@@ -74,7 +79,8 @@ class SellerClient(BaseClient):
         execution_request: ExecutionRequest,
         payment_payload: "PaymentPayload | None" = None,
     ) -> ExecutionResult:
-        """Execute task with async pattern and x402 payment flow.
+        """
+        Execute task with async pattern and x402 payment flow.
 
         Initial request returns immediately with task_id and buyer_secret.
         Use poll_task_status() to check completion.
@@ -90,8 +96,8 @@ class SellerClient(BaseClient):
         Raises:
             InvalidPaymentProofError: If payment proof is invalid or expired
             ExecutionFailedError: If task execution fails
-        """
 
+        """
         headers: dict[str, str] = {}
         if payment_payload:
             # Encode PaymentPayload in X-PAYMENT header (x402 format)
@@ -100,11 +106,15 @@ class SellerClient(BaseClient):
             elif isinstance(payment_payload, dict):
                 payload = PaymentPayload.model_validate(payment_payload)
             else:
-                raise ValueError(f"Invalid payment_payload type: {type(payment_payload)}")
-            
+                raise ValueError(
+                    f"Invalid payment_payload type: {type(payment_payload)}"
+                )
+
             # Base64 encode for x402 X-PAYMENT header
             payment_json = payload.model_dump_json(by_alias=True)
-            headers["X-PAYMENT"] = base64.b64encode(payment_json.encode("utf-8")).decode("utf-8")
+            headers["X-PAYMENT"] = base64.b64encode(
+                payment_json.encode("utf-8")
+            ).decode("utf-8")
 
         try:
             response = await self._http_client.post(
@@ -120,8 +130,12 @@ class SellerClient(BaseClient):
                 error_data = response.json() if response.content else {}
                 error_code = error_data.get("error_code", "")
                 if "INVALID_PAYMENT_PROOF" in error_code:
-                    raise InvalidPaymentProofError(error_data.get("message", "Invalid payment proof"))
-                raise InvalidPaymentProofError("Payment required but could not be processed")
+                    raise InvalidPaymentProofError(
+                        error_data.get("message", "Invalid payment proof")
+                    )
+                raise InvalidPaymentProofError(
+                    "Payment required but could not be processed"
+                )
 
             response.raise_for_status()
             return ExecutionResult.model_validate(response.json())
@@ -131,11 +145,17 @@ class SellerClient(BaseClient):
                 error_data = e.response.json() if e.response.content else {}
                 error_code = error_data.get("error_code", "")
                 if "INVALID_PAYMENT_PROOF" in error_code:
-                    raise InvalidPaymentProofError(error_data.get("message", "Invalid payment proof"))
-                raise InvalidPaymentProofError("Payment required but could not be processed")
+                    raise InvalidPaymentProofError(
+                        error_data.get("message", "Invalid payment proof")
+                    )
+                raise InvalidPaymentProofError(
+                    "Payment required but could not be processed"
+                )
             elif e.response.status_code == 500:
                 error_data = e.response.json() if e.response.content else {}
-                raise ExecutionFailedError(error_data.get("message", "Task execution failed"))
+                raise ExecutionFailedError(
+                    error_data.get("message", "Task execution failed")
+                )
             raise
 
     async def get_pricing(self) -> dict:
@@ -156,7 +176,8 @@ class SellerClient(BaseClient):
         task_id: str,
         buyer_secret: str,
     ) -> ExecutionResult:
-        """Poll task status using task_id and buyer_secret.
+        """
+        Poll task status using task_id and buyer_secret.
 
         Args:
             task_id: Task UUID from initial execution request
@@ -168,24 +189,25 @@ class SellerClient(BaseClient):
         Raises:
             ValueError: If task not found or secret invalid
             ExecutionFailedError: If task failed
+
         """
         headers = {"X-Buyer-Secret": buyer_secret}
-        
+
         try:
             response = await self._http_client.get(
                 f"{self.base_url}/tasks/{task_id}",
                 headers=headers,
                 timeout=self.timeout,
             )
-            
+
             if response.status_code == 404:
                 raise ValueError(f"Task not found: {task_id}")
             if response.status_code == 403:
                 raise ValueError(f"Invalid buyer_secret for task: {task_id}")
-            
+
             response.raise_for_status()
             return ExecutionResult.model_validate(response.json())
-            
+
         except httpx.HTTPStatusError as e:
             if e.response.status_code == 404:
                 raise ValueError(f"Task not found: {task_id}")

@@ -99,9 +99,9 @@ from xy_market.buyer_sdk.agent import BuyerSDK
 from x402.clients.httpx import x402HttpxClient
 from eth_account import Account
 
-# Initialize SDK with search engine URL
+# Initialize SDK with marketplace URL
 sdk = BuyerSDK(
-    search_engine_url="http://search_engine:8000",
+    marketplace_url="http://marketplace:8000",
     http_client=x402HttpxClient(account=Account.from_key("your_private_key"))
 )
 
@@ -115,11 +115,11 @@ result = await sdk.execute_task(
 )
 ```
 
-📖 See the complete buyer example: [`examples/buyer-example`](./examples/buyer-example) for a full implementation with LangGraph agent integration
+📖 See the complete buyer example: [`examples/buyer-template`](./examples/buyer-template) for a full implementation with LangGraph agent integration
 
 ### Seller Overview
 
-To make your agent Xyber-compatible, you must implement core requirements outlined in [`docs/SELLER_SPEC.md`](./docs/SELLER_SPEC.md)
+To make your agent Xyber-compatible, you must implement core requirements outlined in [`docs/PROTOCOL_SPECIFICATION.md`](./docs/PROTOCOL_SPECIFICATION.md)
 
 
 **1. Required Endpoints**:
@@ -148,7 +148,7 @@ async def get_task_status(task_id: str, x_buyer_secret: str = Header(...)):
 **3. x402 Payment Protocol** — Configure payment middleware for paid endpoints
 
 
-📖 We highly recommend starting from the standard [seller template](./examples/seller-template). For detailed seller creation guide, see [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md#seller-creation-guide)
+📖 We highly recommend starting from the standard [seller template](./examples/seller-template). For detailed seller creation guide, see [Seller Creation Guide](./docs/SELLER_CREATION_GUIDE.md)
 
 
 ## How it works
@@ -237,11 +237,13 @@ Once your agent runs locally and passes validation:
 | **Resource** | **Description** |
 |:-------------|:----------------|
 | [Xyber Platform](https://app.xyber.inc/store) | Discover and use AI agents on the Xyber marketplace |
-| [Getting Started](./docs/GETTING_STARTED.md) | Quickstart guide for buyers and sellers |
+| [Protocol Specification](./docs/PROTOCOL_SPECIFICATION.md) | Complete protocol specification (abstractions & technical details) |
+| [Seller Creation Guide](./docs/SELLER_CREATION_GUIDE.md) | Guide for creating seller agents |
+| [Buyer Creation Guide](./docs/BUYER_CREATION_GUIDE.md) | Guide for creating buyer agents |
+| [MCP Plugin Creation Guide](./docs/MCP_PLUGIN_CREATION_GUIDE.md) | Guide for creating MCP server plugins |
 | [Monetization Guide](./docs/MONETIZATION.md) | Pricing, receipts, and failure modes |
-| [Architecture Overview](./docs/ARCHITECTURE.md) | System architecture and design |
 | [Verifiable Execution](https://modelcontextprotocol.io) | A deep-dive doc about PROOF validation mechanisms |
-| [Technical Specification](./docs/AGENT_SWARMS%20%28MAS%29.md) | Playbook-style SRS doc |
+| [Technical Specification](./docs/AGENT_SWARMS_SRS.md) | Software Requirements Specification (SRS) |
 | [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
 | [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) | Trustless Agents standard for agent discovery and trust |
 | [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
