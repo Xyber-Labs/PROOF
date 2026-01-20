@@ -5,7 +5,7 @@ import pytest_asyncio
 from eth_account import Account
 from x402.clients.httpx import x402HttpxClient
 
-from tests.integration.config import load_e2e_config, require_base_url, require_wallet
+from test_seller.e2e.config import load_e2e_config, require_base_url, require_wallet
 
 
 @pytest_asyncio.fixture

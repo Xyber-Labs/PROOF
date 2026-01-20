@@ -18,7 +18,6 @@ Open-source framework to convert AI agents into a real services that others can 
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
 [![ERC-8004](https://img.shields.io/badge/ERC--8004-Based-blue)](https://eips.ethereum.org/EIPS/eip-8004)
 [![TEE](https://img.shields.io/badge/TEE-Secured-orange)](https://github.com/Xyber-Labs/go-tee) <br>
-[![Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Xyber-Labs/PROOF) <br>
 [![Twitter Follow](https://img.shields.io/twitter/follow/Xyberinc?style=social)](https://x.com/Xyberinc)
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.com/channels/1352248408634687623/1357614592225968298)
 
@@ -69,7 +68,7 @@ Whether you're an **open-source builder** monetizing your agent, a **developer p
 
 PROOF is in open Beta stage, actively developing with major interfaces stable for early adopters. Some components, particularly onchain memory and verifiable TEE execution, remain experimental.
 
-> The PROOF framework initiates the Xyber ecosystem by enabling the creation of agents. The 0-100 Engine enhances functionality by launching token agents for various utility mechanisms.
+> The PROOF framework initiates the Xyber ecosystem by enabling the creation of agents. The [0-100 Engine](https://docs.xyber.inc/the-launch-layer/the-0-100-engine-r) enhances functionality by launching token agents for various utility mechanisms.
 
 
 ## Quickstart
@@ -85,8 +84,9 @@ docker compose up --build
 ```
 
 Once running, access:
-- **Buyer Swagger UI**: `http://localhost:8006/docs`
-- **Seller Swagger UI**: `http://localhost:8001/docs`
+- **Buyer Swagger UI**: [http://localhost:8003/docs](http://localhost:8003/docs) to ask the buyer agent about what services are available
+- **Seller Swagger UI**: [http://localhost:8001/docs](http://localhost:8001/docs) to explore seller capabilities
+- **Marketplace Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) to view the marketplace API contracts
 
 
 
@@ -236,20 +236,19 @@ Once your agent runs locally and passes validation:
 
 | **Resource** | **Description** |
 |:-------------|:----------------|
-| [Xyber Platform](https://app.xyber.inc/store) | Discover and use AI agents on the Xyber marketplace |
+| [Xyber Platform Website](https://app.xyber.inc/store) | Discover and use AI agents on the Xyber marketplace |
 | [Protocol Specification](./docs/PROTOCOL_SPECIFICATION.md) | Complete protocol specification (abstractions & technical details) |
-| [Seller Creation Guide](./docs/SELLER_CREATION_GUIDE.md) | Guide for creating seller agents |
-| [Buyer Creation Guide](./docs/BUYER_CREATION_GUIDE.md) | Guide for creating buyer agents |
-| [MCP Plugin Creation Guide](./docs/MCP_PLUGIN_CREATION_GUIDE.md) | Guide for creating MCP server plugins |
-| [Monetization Guide](./docs/MONETIZATION.md) | Pricing, receipts, and failure modes |
-| [Verifiable Execution](https://modelcontextprotocol.io) | A deep-dive doc about PROOF validation mechanisms |
+| [Seller Creation Guide](./docs/SELLER_CREATION_GUIDE.md) | Provide details  about seller agents creation|
+| [Buyer Creation Guide](./docs/BUYER_CREATION_GUIDE.md) | Provide details about buyer agents creation |
+| [Plugin Creation Guide](./docs/MCP_PLUGIN_CREATION_GUIDE.md) | Provide details about MCP plugin creation |
+| [Verifiable Execution](./docs/VERIFIABLE_EXECUTION.md) | A deep-dive doc about PROOF validation mechanisms |
 | [Technical Specification](./docs/AGENT_SWARMS_SRS.md) | Software Requirements Specification (SRS) |
-| [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
-| [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) | Trustless Agents standard for agent discovery and trust |
 | [Xyber TEE Repository](https://github.com/Xyber-Labs/go-tee) | Trusted Execution Environment implementation |
 | [Xyber Onchain Memory Repository](https://github.com/Xyber-Labs/verifiable-memory) | Verifiable memory proofs implementation |
 | [Xyber MCP Servers Repository](https://github.com/Xyber-Labs/mcp-servers) | MCP plugins and server implementations |
 | [Xyber SC Repository](https://github.com/Xyber-Labs/Smart-Contracts-Registry) | Smart Contract standing for transparence |
+| [MCP Protocol Spec](https://modelcontextprotocol.io) | Official MCP documentation |
+| [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) | Trustless Agents standard for agent discovery and trust |
 
 
 ## Roadmap

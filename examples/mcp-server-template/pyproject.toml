@@ -89,12 +89,12 @@ indent-style = "space"
 line-ending = "auto"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*" = ["S101", "D"]  # Allow assert in tests, skip docstrings
+"test_mcp_server/**/*" = ["S101", "D"]  # Allow assert in tests, skip docstrings
 
 [tool.mypy]
 python_version = "3.12"
 files = ["src/**/*.py"]
-exclude = ["tests/", "__pycache__/"]
+exclude = ["test_mcp_server/", "__pycache__/"]
 strict = true
 ignore_missing_imports = true
 show_error_codes = true
@@ -109,7 +109,7 @@ check_untyped_defs = true
 # ignore_errors = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["test_mcp_server"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]

@@ -35,7 +35,7 @@ def initiate_task_execution(
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
                 response = await client.post(
-                    f"{e2e_config.seller_url}/execute",
+                    f"{e2e_config.seller_url}/hybrid/execute",
                     json=execution_request,
                 )
 
@@ -69,7 +69,7 @@ def poll_with_correct_secret(
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(
-                f"{e2e_config.seller_url}/tasks/{task_id}",
+                f"{e2e_config.seller_url}/hybrid/tasks/{task_id}",
                 headers={"X-Buyer-Secret": buyer_secret},
             )
             workflow_context["correct_secret_status"] = response.status_code
@@ -102,7 +102,7 @@ def poll_with_wrong_secret(
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(
-                f"{e2e_config.seller_url}/tasks/{task_id}",
+                f"{e2e_config.seller_url}/hybrid/tasks/{task_id}",
                 headers={"X-Buyer-Secret": "wrong-secret-12345"},
             )
             workflow_context["wrong_secret_status"] = response.status_code
@@ -125,7 +125,7 @@ def poll_without_secret(
             pytest.skip("No task_id available")
 
         async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.get(f"{e2e_config.seller_url}/tasks/{task_id}")
+            response = await client.get(f"{e2e_config.seller_url}/hybrid/tasks/{task_id}")
             workflow_context["no_secret_status"] = response.status_code
             print(f"Poll without secret: {response.status_code}")
 

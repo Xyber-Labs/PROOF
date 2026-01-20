@@ -30,6 +30,10 @@ from tests.e2e.steps.health_steps import *  # noqa: F401, F403
 from tests.e2e.steps.registration_steps import *  # noqa: F401, F403
 from tests.e2e.steps.execution_steps import *  # noqa: F401, F403
 from tests.e2e.steps.auth_steps import *  # noqa: F401, F403
+from tests.e2e.steps.marketplace_steps import *  # noqa: F401, F403
+from tests.e2e.steps.seller_steps import *  # noqa: F401, F403
+from tests.e2e.steps.mcp_server_steps import *  # noqa: F401, F403
+from tests.e2e.steps.buyer_steps import *  # noqa: F401, F403
 
 
 # =============================================================================

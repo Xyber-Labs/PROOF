@@ -58,6 +58,7 @@ FROM python:3.12-slim-bookworm AS prod
 WORKDIR /app/examples/seller-template
 
 COPY --from=builder /app/examples/seller-template/.venv .venv
+COPY --from=builder /app/examples/seller-template/tool_pricing.yaml .
 
 ENV PATH="/app/examples/seller-template/.venv/bin:$PATH"
 

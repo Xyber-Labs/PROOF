@@ -81,12 +81,12 @@ indent-style = "space"
 line-ending = "auto"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*" = ["S101", "D"]
+"test_marketplace/**/*" = ["S101", "D"]
 
 [tool.mypy]
 python_version = "3.12"
 files = ["src/**/*.py"]
-exclude = ["tests/", "__pycache__/"]
+exclude = ["test_marketplace/", "__pycache__/"]
 strict = true
 ignore_missing_imports = true
 show_error_codes = true
@@ -96,7 +96,7 @@ disallow_any_generics = true
 check_untyped_defs = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["test_marketplace"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
@@ -110,5 +110,6 @@ addopts = [
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
+    "e2e: marks tests as end-to-end tests requiring running services",
 ]
 

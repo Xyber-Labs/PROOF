@@ -12,6 +12,8 @@ Feature: Full PROOF Ecosystem Workflow
     # -------------------------------------------------------------------------
     Scenario: Seller auto-registers with marketplace on startup
         Given the Seller service is running
+        And the Marketplace service is running
+        And a seller agent is registered with the marketplace
         Then the seller should be discoverable via marketplace
         And the seller profile should contain valid metadata
 
@@ -64,6 +66,7 @@ Feature: Full PROOF Ecosystem Workflow
     Scenario: Buyer pays seller via x402 protocol
         Given the buyer has a configured wallet
         And a seller agent is registered with the marketplace
+        And the seller has paid endpoints
         When the buyer initiates a paid task with the seller
         Then the x402 payment should be processed
         And the task execution should proceed after payment

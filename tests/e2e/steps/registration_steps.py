@@ -29,7 +29,8 @@ def register_seller(
     async def _register():
         seller_profile = {
             "agent_id": workflow_context["seller_id"],
-            "base_url": e2e_config.seller_url,
+            "agent_name": "Test Seller Agent",
+            "base_url": f"https://test-seller-{workflow_context['seller_id'][:8]}.example.com",
             "description": "News Agent that finds and summarizes latest news articles about AI and technology",
             "tags": ["news", "ai", "technology"],
         }

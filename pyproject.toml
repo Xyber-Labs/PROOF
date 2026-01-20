@@ -13,7 +13,11 @@ dependencies = [
     "pydantic-settings>=2.0",
     "eth-account>=0.10.0",
     "x402==0.2.1",
+    "xy_market",
 ]
+
+[tool.uv.sources]
+xy_market = { path = "xy_market", editable = true }
 
 [dependency-groups]
 dev = [
@@ -47,9 +51,15 @@ line-ending = "auto"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*" = ["S101", "D"]
+"**/test_*/**/*" = ["S101", "D"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = [
+    "tests",
+    "examples/seller-template/test_seller/e2e",
+    "examples/buyer-template/test_buyer/e2e",
+    "examples/mcp-server-template/test_mcp_server/e2e",
+]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
@@ -65,6 +75,10 @@ markers = [
     "e2e: marks tests as end-to-end tests (require running services)",
     "integration: marks tests as integration tests",
     "slow: marks tests as slow",
+    "payment: marks tests that require wallet/payment configuration",
+    "payment_agnostic: marks tests that work regardless of payment configuration",
+    "payment_enabled: marks tests that require payment to be enabled on the server",
+    "payment_disabled: marks tests that require payment to be disabled on the server",
 ]
 
 # pytest-bdd configuration

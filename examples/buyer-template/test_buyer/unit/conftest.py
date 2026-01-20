@@ -1,5 +1,3 @@
-"""Shared fixtures for buyer_example unit tests."""
-
 from __future__ import annotations
 
 from unittest.mock import AsyncMock, MagicMock

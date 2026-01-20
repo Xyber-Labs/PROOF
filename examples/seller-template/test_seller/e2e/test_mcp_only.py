@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from tests.e2e.config import load_e2e_config, require_base_url
-from tests.e2e.utils import (
+from test_seller.e2e.config import load_e2e_config, require_base_url
+from test_seller.e2e.utils import (
     call_mcp_tool,
     initialize_mcp_session,
     negotiate_mcp_session_id,
@@ -11,9 +11,9 @@ from tests.e2e.utils import (
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
-@pytest.mark.slow
-async def test_mcp_geolocate_city_tool() -> None:
+@pytest.mark.e2e
+@pytest.mark.payment_agnostic
+async def test_mcp_hello_robot_tool() -> None:
     config = load_e2e_config()
     require_base_url(config)
 
@@ -22,18 +22,18 @@ async def test_mcp_geolocate_city_tool() -> None:
     response = await call_mcp_tool(
         config,
         session_id,
-        name="geolocate_city",
-        arguments={"city": "Tokyo"},
+        name="hello_robot",
+        arguments={},
     )
     assert response.status_code == 200
     payload = response.text
-    assert "Tokyo" in payload
+    assert "hello" in payload.lower()
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
-@pytest.mark.slow
-async def test_mcp_weather_analysis_tool_requires_payment() -> None:
+@pytest.mark.e2e
+@pytest.mark.payment_enabled
+async def test_mcp_analysis_tool_requires_payment() -> None:
     config = load_e2e_config()
     require_base_url(config)
 
@@ -42,8 +42,8 @@ async def test_mcp_weather_analysis_tool_requires_payment() -> None:
     response = await call_mcp_tool(
         config,
         session_id,
-        name="get_weather_analysis",
-        arguments={"city": "London"},
+        name="get_analysis",
+        arguments={"input_data": "test"},
     )
     # Currently priced; we expect 402 until payment flow is wired for MCP tools.
     assert response.status_code == 402

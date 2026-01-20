@@ -80,7 +80,7 @@ Implemented by:
   - Tampered `network` field → 402 with `"No matching payment requirements found"`.
 
 =================================
-Test-cases for integration tests
+Test-cases for E2E tests
 
 Seller Template:
 
@@ -89,34 +89,34 @@ Happy Path:
 - If an endpoint has multiple payment options - we can follow any of them, all work.
 - If an endpoint is hybrid - it works both with REST and MCP.
 
-This is enforced by the pytest-based integration suite under `tests/integration`:
+This is enforced by the pytest-based E2E suite under `test_seller/e2e`:
 
 - **REST-only:**
   - `/api/health`:
-    - Implemented by: `tests/integration/test_rest_only.py::test_health_endpoint_available`
+    - Implemented by: `test_seller/e2e/test_rest_only.py::test_health_endpoint_available`
   - `/api/admin/logs`:
     - 402 without payment:
-      - Implemented by: `tests/integration/test_rest_only.py::test_admin_logs_requires_payment`
+      - Implemented by: `test_seller/e2e/test_rest_only.py::test_admin_logs_requires_payment`
     - 200 with x402 payment:
-      - Implemented by: `tests/integration/test_rest_only.py::test_admin_logs_succeeds_with_x402`
+      - Implemented by: `test_seller/e2e/test_rest_only.py::test_admin_logs_succeeds_with_x402`
 
 - **Hybrid (REST + MCP context):**
   - `/hybrid/execute` via REST:
-    - Implemented by: `tests/integration/test_hybrid.py::test_hybrid_execute_via_rest`
+    - Implemented by: `test_seller/e2e/test_hybrid.py::test_hybrid_execute_via_rest`
   - `/hybrid/tasks/{task_id}` via REST:
-    - Implemented by: `tests/integration/test_hybrid.py::test_hybrid_tasks_via_rest`
+    - Implemented by: `test_seller/e2e/test_hybrid.py::test_hybrid_tasks_via_rest`
   - `/hybrid/execute`:
     - 402 without payment (if payment enabled):
-      - Implemented by: `tests/integration/test_hybrid.py::test_hybrid_execute_requires_payment`
+      - Implemented by: `test_seller/e2e/test_hybrid.py::test_hybrid_execute_requires_payment`
     - Successful paid call (when environment is fully wired):
-      - Implemented by: `tests/integration/test_hybrid.py::test_hybrid_execute_succeeds_with_x402`
+      - Implemented by: `test_seller/e2e/test_hybrid.py::test_hybrid_execute_succeeds_with_x402`
 
 - **MCP-only tools:**
   - `hello_robot`:
-    - Implemented by: `tests/integration/test_mcp_only.py::test_mcp_hello_robot_tool`
+    - Implemented by: `test_seller/e2e/test_mcp_only.py::test_mcp_hello_robot_tool`
   - `get_analysis` (priced MCP tool):
     - currently expected to return 402 without payment:
-      - Implemented by: `tests/integration/test_mcp_only.py::test_mcp_analysis_tool_requires_payment`
+      - Implemented by: `test_seller/e2e/test_mcp_only.py::test_mcp_analysis_tool_requires_payment`
 
 Edge cases for end-to-end tests include:
 - Multiple priced options for the same `operation_id`, ensuring the client can successfully pay with any configured asset/network.

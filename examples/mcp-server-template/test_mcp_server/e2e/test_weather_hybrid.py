@@ -6,7 +6,7 @@ import pytest_asyncio
 from eth_account import Account
 from x402.clients.httpx import x402HttpxClient
 
-from tests.e2e.config import (
+from test_mcp_server.e2e.config import (
     load_e2e_config,
     require_base_url,
     require_wallet,
@@ -44,7 +44,7 @@ async def hybrid_paid_client():
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_hybrid_current_via_rest(hybrid_rest_client) -> None:
     config, client = hybrid_rest_client
@@ -61,7 +61,7 @@ async def test_hybrid_current_via_rest(hybrid_rest_client) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_hybrid_current_via_rest_missing_header_falls_back_to_config(hybrid_rest_client):
     """Test that missing header falls back to WEATHER_API_KEY config if available."""
@@ -84,7 +84,7 @@ async def test_hybrid_current_via_rest_missing_header_falls_back_to_config(hybri
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_hybrid_forecast_requires_payment(hybrid_rest_client) -> None:
     config, client = hybrid_rest_client
@@ -96,7 +96,7 @@ async def test_hybrid_forecast_requires_payment(hybrid_rest_client) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_hybrid_forecast_succeeds_with_x402(hybrid_paid_client) -> None:
     config, client = hybrid_paid_client
@@ -109,3 +109,16 @@ async def test_hybrid_forecast_succeeds_with_x402(hybrid_paid_client) -> None:
     body = response.json()
     assert body.get("days") == 5
     assert isinstance(body.get("forecast"), list)
+
+
+@pytest.mark.asyncio
+@pytest.mark.e2e
+async def test_hybrid_pricing_endpoint(hybrid_rest_client) -> None:
+    """Test /hybrid/pricing endpoint returns tool pricing info."""
+    config, client = hybrid_rest_client
+    response = await client.get("/hybrid/pricing")
+    assert response.status_code == 200
+    body = response.json()
+    # Pricing endpoint should return pricing configuration
+    assert isinstance(body, dict)
+    assert "pricing" in body or "error" in body

@@ -149,8 +149,7 @@ async def test_list_agents_success(http_client):
         mock_request.assert_called_once()
         call_kwargs = mock_request.call_args.kwargs
         assert call_kwargs["method"] == "GET"
-        assert "limit=10" in call_kwargs["url"]
-        assert "offset=0" in call_kwargs["url"]
+        assert call_kwargs["params"] == {"limit": 10, "offset": 0}
 
 
 @pytest.mark.asyncio
@@ -196,8 +195,7 @@ async def test_list_agents_pagination(http_client):
 
         # Verify pagination parameters
         call_kwargs = mock_request.call_args.kwargs
-        assert "limit=50" in call_kwargs["url"]
-        assert "offset=25" in call_kwargs["url"]
+        assert call_kwargs["params"] == {"limit": 50, "offset": 25}
 
 
 @pytest.mark.asyncio

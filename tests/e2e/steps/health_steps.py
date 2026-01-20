@@ -28,8 +28,8 @@ def check_all_services_healthy(e2e_config: E2ETestConfig):
             services = [
                 ("Marketplace", f"{e2e_config.marketplace_url}/docs"),
                 ("Seller", f"{e2e_config.seller_url}/api/health"),
-                ("MCP Server", f"{e2e_config.mcp_server_url}/health"),
-                ("Buyer", f"{e2e_config.buyer_url}/health"),
+                ("MCP Server", f"{e2e_config.mcp_server_url}/api/health"),
+                ("Buyer", f"{e2e_config.buyer_url}/docs"),
             ]
 
             for name, url in services:
@@ -87,7 +87,7 @@ def check_mcp_server_running(e2e_config: E2ETestConfig, workflow_context: dict[s
     async def _check():
         async with httpx.AsyncClient(timeout=10.0) as client:
             try:
-                response = await client.get(f"{e2e_config.mcp_server_url}/health")
+                response = await client.get(f"{e2e_config.mcp_server_url}/api/health")
                 assert response.status_code == 200
                 workflow_context["mcp_server_healthy"] = True
                 print(f"MCP Server is healthy at {e2e_config.mcp_server_url}")
@@ -104,7 +104,8 @@ def check_buyer_running(e2e_config: E2ETestConfig, workflow_context: dict[str, A
     async def _check():
         async with httpx.AsyncClient(timeout=10.0) as client:
             try:
-                response = await client.get(f"{e2e_config.buyer_url}/health")
+                # Buyer doesn't have /health endpoint, use /docs instead
+                response = await client.get(f"{e2e_config.buyer_url}/docs")
                 assert response.status_code == 200
                 workflow_context["buyer_healthy"] = True
                 print(f"Buyer is healthy at {e2e_config.buyer_url}")

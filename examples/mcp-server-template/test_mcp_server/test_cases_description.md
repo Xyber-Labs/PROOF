@@ -138,32 +138,32 @@ Happy Path:
 - If an endpoint has multiple payment options - we can follow any of them, all work.
 - If an endpoint is hybrid - it works both with REST and MCP.
 
-This is enforced by the pytest-based E2E suite under `tests/e2e`:
+This is enforced by the pytest-based E2E suite under `test_mcp_server/e2e`:
 
 - **REST-only:**
   - `/api/health`:
-    - Implemented by: `tests/e2e/test_rest_only.py::test_health_endpoint_available`
+    - Implemented by: `test_mcp_server/e2e/test_weather_rest_only.py::test_health_endpoint_available`
   - `/api/admin/logs`:
     - 402 without payment:
-      - Implemented by: `tests/e2e/test_rest_only.py::test_admin_logs_requires_payment`
+      - Implemented by: `test_mcp_server/e2e/test_weather_rest_only.py::test_admin_logs_requires_payment`
     - 200 with x402 payment:
-      - Implemented by: `tests/e2e/test_rest_only.py::test_admin_logs_succeeds_with_x402`
+      - Implemented by: `test_mcp_server/e2e/test_weather_rest_only.py::test_admin_logs_succeeds_with_x402`
 
 - **Hybrid (REST + MCP context):**
   - `/hybrid/current` via REST:
-    - Implemented by: `tests/e2e/test_hybrid.py::test_hybrid_current_via_rest`
+    - Implemented by: `test_mcp_server/e2e/test_weather_hybrid.py::test_hybrid_current_via_rest`
   - `/hybrid/forecast`:
     - 402 without payment:
-      - Implemented by: `tests/e2e/test_hybrid.py::test_hybrid_forecast_requires_payment`
+      - Implemented by: `test_mcp_server/e2e/test_weather_hybrid.py::test_hybrid_forecast_requires_payment`
     - Successful paid call (when environment is fully wired):
-      - Implemented by: `tests/e2e/test_hybrid.py::test_hybrid_forecast_succeeds_with_x402`
+      - Implemented by: `test_mcp_server/e2e/test_weather_hybrid.py::test_hybrid_forecast_succeeds_with_x402`
 
 - **MCP-only tools:**
   - `geolocate_city`:
-    - Implemented by: `tests/e2e/test_mcp_only.py::test_mcp_geolocate_city_tool`
+    - Implemented by: `test_mcp_server/e2e/test_weather_mcp_only.py::test_mcp_geolocate_city_tool`
   - `get_weather_analysis` (priced MCP tool):
     - currently expected to return 402 without payment:
-      - Implemented by: `tests/e2e/test_mcp_only.py::test_mcp_weather_analysis_tool_requires_payment`
+      - Implemented by: `test_mcp_server/e2e/test_weather_mcp_only.py::test_mcp_weather_analysis_tool_requires_payment`
 
 Edge cases for end-to-end tests include:
 - Multiple priced options for the same `operation_id`, ensuring the client can successfully pay with any configured asset/network.

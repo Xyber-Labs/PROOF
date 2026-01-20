@@ -68,7 +68,7 @@ class ArchivistGraphBuilder:
             )
             # Return a minimal agent that can respond but has no tools
             def no_tools_chatbot(state: AgentState):
-                return {"messages": [llm.invoke(state["messages"])]}
+                return {"messages": [llm.invoke(state.messages)]}
 
             graph_builder = StateGraph(AgentState)
             graph_builder.add_node("chatbot", no_tools_chatbot)
@@ -79,7 +79,7 @@ class ArchivistGraphBuilder:
         llm_with_tools = llm.bind_tools(tools)
 
         def chatbot(state: AgentState):
-            return {"messages": [llm_with_tools.invoke(state["messages"])]}
+            return {"messages": [llm_with_tools.invoke(state.messages)]}
 
         graph_builder = StateGraph(AgentState)
         graph_builder.add_node("chatbot", chatbot)
@@ -90,7 +90,7 @@ class ArchivistGraphBuilder:
         graph_builder.add_edge(START, "chatbot")
         graph_builder.add_conditional_edges(
             "chatbot",
-            lambda state: "tools" if state["messages"][-1].tool_calls else END,
+            lambda state: "tools" if state.messages[-1].tool_calls else END,
         )
         graph_builder.add_edge("tools", "chatbot")
 

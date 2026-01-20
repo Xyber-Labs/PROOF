@@ -6,7 +6,7 @@ import pytest_asyncio
 from eth_account import Account
 from x402.clients.httpx import x402HttpxClient
 
-from tests.e2e.config import load_e2e_config, require_base_url, require_wallet
+from test_mcp_server.e2e.config import load_e2e_config, require_base_url, require_wallet
 
 
 @pytest_asyncio.fixture
@@ -37,7 +37,7 @@ async def paid_rest_client():
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_health_endpoint_available(rest_client) -> None:
     config, client = rest_client
@@ -49,7 +49,7 @@ async def test_health_endpoint_available(rest_client) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_admin_logs_requires_payment(rest_client) -> None:
     config, client = rest_client
@@ -61,7 +61,7 @@ async def test_admin_logs_requires_payment(rest_client) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.slow
 async def test_admin_logs_succeeds_with_x402(paid_rest_client) -> None:
     config, client = paid_rest_client

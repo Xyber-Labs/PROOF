@@ -56,6 +56,6 @@ COPY tool_pricing.yaml .
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-EXPOSE 8000
+EXPOSE 8002
 
-CMD ["python", "-m", "mcp_server_weather", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "mcp_server_weather", "--host", "0.0.0.0", "--port", "8002"]

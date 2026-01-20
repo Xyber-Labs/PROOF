@@ -4,7 +4,7 @@ import pytest
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.payment_agnostic
 async def test_health_endpoint_available(rest_client) -> None:
     config, client = rest_client
@@ -12,11 +12,11 @@ async def test_health_endpoint_available(rest_client) -> None:
     assert response.status_code == 200
     payload = response.json()
     assert payload.get("status") == "ok"
-    assert payload.get("service") == "seller-template"
+    assert payload.get("service") == "xy-seller-template"
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.payment_enabled
 async def test_admin_logs_requires_payment(rest_client) -> None:
     config, client = rest_client
@@ -28,7 +28,7 @@ async def test_admin_logs_requires_payment(rest_client) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.integration
+@pytest.mark.e2e
 @pytest.mark.payment_enabled
 async def test_admin_logs_succeeds_with_x402(paid_client) -> None:
     config, client = paid_client
