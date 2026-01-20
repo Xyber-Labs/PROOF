@@ -269,23 +269,22 @@ class TestExecutionServiceAgentInitialization:
         return mock
 
     @pytest.mark.asyncio
-    async def test_execution_service_fails_on_no_tools(
+    async def test_execution_service_starts_without_tools(
         self, mock_dependencies: MagicMock
     ) -> None:
-        """Verify ExecutionService raises error when no tools available.
+        """Verify ExecutionService starts with warning when no tools available.
 
         Given dependencies with no MCP tools,
         When initializing ExecutionService,
-        Then RuntimeError should be raised.
+        Then it should start successfully but log a warning.
         """
         with patch("seller_template.xy_archivist.graph.get_model") as mock_get_model:
             mock_llm = MagicMock()
             mock_get_model.return_value = mock_llm
 
-            with pytest.raises(RuntimeError) as exc_info:
-                ExecutionService(dependencies=mock_dependencies)
-
-            assert "No tools available" in str(exc_info.value)
+            # Should not raise - agent starts with limited functionality
+            service = ExecutionService(dependencies=mock_dependencies)
+            assert service is not None
 
     @pytest.mark.asyncio
     async def test_execution_service_fails_on_llm_init_error(self) -> None:

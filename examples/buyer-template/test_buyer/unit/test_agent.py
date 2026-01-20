@@ -21,6 +21,16 @@ from buyer_example.agent import BuyerAgent, BuyerAgentState
 
 
 @pytest.fixture
+def mock_settings():
+    """Create mock Settings."""
+    settings = MagicMock()
+    settings.google_api_keys = ["test-api-key"]
+    settings.together_api_keys = []
+    settings.llm_model = "gemini-2.0-flash-exp"
+    return settings
+
+
+@pytest.fixture
 def mock_llm():
     """Create mock LLM."""
     llm = MagicMock()

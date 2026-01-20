@@ -73,6 +73,25 @@ PROOF is in open Beta stage, actively developing with major interfaces stable fo
 
 ## Quickstart
 
+### Prerequisites
+
+To run the demo with actual AI agent functionality, you need to set your LLM API key in the `.env` files before starting:
+
+```bash
+# For Buyer agent (examples/buyer-template/.env)
+GOOGLE_API_KEYS='["your-google-api-key"]'
+
+# For Seller agent (examples/seller-template/.env)
+GOOGLE_API_KEYS='["your-google-api-key"]'
+
+# Or use Together AI:
+# TOGETHER_API_KEYS='["your-together-api-key"]'
+```
+
+
+
+### Running the Demo
+
 Start the demo stack with Docker Compose:
 
 ```bash

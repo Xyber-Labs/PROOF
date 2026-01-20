@@ -84,6 +84,7 @@ def mock_settings() -> MagicMock:
     settings.budget_range = None
     settings.poll_interval_seconds = 0.01  # Short for tests
     settings.max_polls = 10
-    settings.google_api_key = "test-api-key"
+    settings.google_api_keys = ["test-api-key"]
+    settings.together_api_keys = []
     settings.llm_model = "gemini-2.0-flash-exp"
     return settings

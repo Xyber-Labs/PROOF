@@ -1,7 +1,8 @@
+import json
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import SecretStr
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -37,9 +38,24 @@ class Settings(BaseSettings):
     seller_retry_backoff_seconds: float = 2.0
     seller_tls_verify_strict: bool = True
 
-    # LLM Configuration
-    google_api_key: str = ""
+    # LLM Configuration - array format for consistency with seller-template
+    google_api_keys: list[str] = []
+    together_api_keys: list[str] = []
     llm_model: str = "gemini-2.0-flash-exp"
+
+    @field_validator("google_api_keys", "together_api_keys", mode="before")
+    @classmethod
+    def parse_json_list(cls, v):
+        """Parse JSON array string into list."""
+        if isinstance(v, str):
+            if not v:
+                return []
+            try:
+                return json.loads(v)
+            except json.JSONDecodeError:
+                # If not valid JSON, treat as single key
+                return [v]
+        return v or []
 
     # Logging
     logging_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"

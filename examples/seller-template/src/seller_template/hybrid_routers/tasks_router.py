@@ -19,7 +19,17 @@ async def get_task_status(
     ),
 ) -> ExecutionResult:
     """Poll task status using task_id and buyer_secret."""
-    execution_service: ExecutionService = request.app.state.execution_service
+    try:
+        execution_service: ExecutionService = request.app.state.execution_service
+    except AttributeError as e:
+        logger.error("ExecutionService not initialized in app state")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error_code": "SERVICE_NOT_INITIALIZED",
+                "message": "Execution service not available",
+            },
+        ) from e
 
     try:
         result = await execution_service.get_task_status(task_id, x_buyer_secret)

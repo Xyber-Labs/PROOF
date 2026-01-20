@@ -40,9 +40,15 @@ class BuyerAgent:
         self.marketplace_client = marketplace_client
         self.http_client = http_client
 
-        # Initialize LLM
+        # Initialize LLM - use first available API key
+        if not self.settings.google_api_keys:
+            raise RuntimeError(
+                "No LLM API key configured. Set GOOGLE_API_KEYS in .env file. "
+                "Example: GOOGLE_API_KEYS='[\"your-api-key\"]'"
+            )
+
         self.llm = ChatGoogleGenerativeAI(
-            google_api_key=self.settings.google_api_key,
+            google_api_key=self.settings.google_api_keys[0],
             model=self.settings.llm_model,
             temperature=0.7,
         )

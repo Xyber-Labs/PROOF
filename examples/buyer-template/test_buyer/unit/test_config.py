@@ -45,8 +45,11 @@ def test_settings_has_expected_fields():
     assert isinstance(settings.seller_max_retries, int)
 
     # LLM Configuration
-    assert hasattr(settings, "google_api_key")
-    assert isinstance(settings.google_api_key, str)
+    assert hasattr(settings, "google_api_keys")
+    assert isinstance(settings.google_api_keys, list)
+
+    assert hasattr(settings, "together_api_keys")
+    assert isinstance(settings.together_api_keys, list)
 
     assert hasattr(settings, "llm_model")
     assert isinstance(settings.llm_model, str)

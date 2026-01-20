@@ -20,7 +20,9 @@ class BuyerAgentService:
 
         self.http_client: x402HttpxClient | None = None
         if buyer_x402_settings.wallet_private_key:
-            account = Account.from_key(buyer_x402_settings.wallet_private_key)
+            account = Account.from_key(
+                buyer_x402_settings.wallet_private_key.get_secret_value()
+            )
             self.http_client = x402HttpxClient(
                 account=account,
                 timeout=self.settings.seller_request_timeout_seconds,
