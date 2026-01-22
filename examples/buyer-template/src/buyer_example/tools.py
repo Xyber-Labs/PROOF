@@ -234,7 +234,9 @@ class BuyerAgentTools:
 
                 polls += 1
                 if max_polls and polls >= max_polls:
-                    logger.warning(f"Max polls ({max_polls}) reached for task {task_id}")
+                    logger.warning(
+                        f"Max polls ({max_polls}) reached for task {task_id}"
+                    )
                     import json
 
                     return json.dumps(

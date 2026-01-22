@@ -8,4 +8,3 @@ Last sync: 2026-01-15
 
 This is a vendored copy for open-source distribution.
 """
-

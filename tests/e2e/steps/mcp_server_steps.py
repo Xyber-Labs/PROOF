@@ -30,9 +30,7 @@ def check_mcp_server_health(
     async def _check():
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
-                response = await client.get(
-                    f"{e2e_config.mcp_server_url}/api/health"
-                )
+                response = await client.get(f"{e2e_config.mcp_server_url}/api/health")
                 workflow_context["mcp_health_status"] = response.status_code
                 print(f"MCP Server health check: {response.status_code}")
             except Exception as e:

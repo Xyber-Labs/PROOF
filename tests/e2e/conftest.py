@@ -22,19 +22,18 @@ from typing import Any
 import pytest
 
 from tests.e2e.config import E2ETestConfig, load_e2e_config
+from tests.e2e.steps.auth_steps import *  # noqa: F401, F403
+from tests.e2e.steps.buyer_steps import *  # noqa: F401, F403
+from tests.e2e.steps.execution_steps import *  # noqa: F401, F403
 
 # =============================================================================
 # Import all step definitions - makes them available to pytest-bdd
 # =============================================================================
 from tests.e2e.steps.health_steps import *  # noqa: F401, F403
-from tests.e2e.steps.registration_steps import *  # noqa: F401, F403
-from tests.e2e.steps.execution_steps import *  # noqa: F401, F403
-from tests.e2e.steps.auth_steps import *  # noqa: F401, F403
 from tests.e2e.steps.marketplace_steps import *  # noqa: F401, F403
-from tests.e2e.steps.seller_steps import *  # noqa: F401, F403
 from tests.e2e.steps.mcp_server_steps import *  # noqa: F401, F403
-from tests.e2e.steps.buyer_steps import *  # noqa: F401, F403
-
+from tests.e2e.steps.registration_steps import *  # noqa: F401, F403
+from tests.e2e.steps.seller_steps import *  # noqa: F401, F403
 
 # =============================================================================
 # Core Fixtures

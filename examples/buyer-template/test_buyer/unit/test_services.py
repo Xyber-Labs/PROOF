@@ -63,7 +63,9 @@ def mock_buyer_agent():
 # =============================================================================
 
 
-def test_service_initializes_marketplace_client(mock_settings, mock_buyer_x402_settings):
+def test_service_initializes_marketplace_client(
+    mock_settings, mock_buyer_x402_settings
+):
     """Test that service initializes MarketplaceClient."""
     with (
         patch("buyer_example.services.get_settings", return_value=mock_settings),
@@ -112,7 +114,10 @@ def test_agent_property_lazy_initialization(
             "buyer_example.services.get_buyer_x402_settings",
             return_value=mock_buyer_x402_settings,
         ),
-        patch("buyer_example.services.MarketplaceClient", return_value=mock_marketplace_client),
+        patch(
+            "buyer_example.services.MarketplaceClient",
+            return_value=mock_marketplace_client,
+        ),
         patch(
             "buyer_example.services.BuyerAgent", return_value=mock_buyer_agent
         ) as mock_agent_class,
@@ -140,7 +145,10 @@ def test_agent_property_returns_same_instance(
             "buyer_example.services.get_buyer_x402_settings",
             return_value=mock_buyer_x402_settings,
         ),
-        patch("buyer_example.services.MarketplaceClient", return_value=mock_marketplace_client),
+        patch(
+            "buyer_example.services.MarketplaceClient",
+            return_value=mock_marketplace_client,
+        ),
         patch("buyer_example.services.BuyerAgent", return_value=mock_buyer_agent),
     ):
         service = BuyerAgentService()
@@ -166,7 +174,10 @@ async def test_process_user_request_success(
             "buyer_example.services.get_buyer_x402_settings",
             return_value=mock_buyer_x402_settings,
         ),
-        patch("buyer_example.services.MarketplaceClient", return_value=mock_marketplace_client),
+        patch(
+            "buyer_example.services.MarketplaceClient",
+            return_value=mock_marketplace_client,
+        ),
         patch("buyer_example.services.BuyerAgent", return_value=mock_buyer_agent),
     ):
         service = BuyerAgentService()
@@ -186,7 +197,10 @@ async def test_process_user_request_calls_agent(
             "buyer_example.services.get_buyer_x402_settings",
             return_value=mock_buyer_x402_settings,
         ),
-        patch("buyer_example.services.MarketplaceClient", return_value=mock_marketplace_client),
+        patch(
+            "buyer_example.services.MarketplaceClient",
+            return_value=mock_marketplace_client,
+        ),
         patch("buyer_example.services.BuyerAgent", return_value=mock_buyer_agent),
     ):
         service = BuyerAgentService()
@@ -212,7 +226,10 @@ async def test_close_closes_marketplace_client(
             "buyer_example.services.get_buyer_x402_settings",
             return_value=mock_buyer_x402_settings,
         ),
-        patch("buyer_example.services.MarketplaceClient", return_value=mock_marketplace_client),
+        patch(
+            "buyer_example.services.MarketplaceClient",
+            return_value=mock_marketplace_client,
+        ),
     ):
         service = BuyerAgentService()
         await service.close()

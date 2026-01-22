@@ -30,9 +30,7 @@ def check_buyer_docs(
     async def _check():
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
-                response = await client.get(
-                    f"{e2e_config.buyer_url}/docs"
-                )
+                response = await client.get(f"{e2e_config.buyer_url}/docs")
                 workflow_context["buyer_docs_status"] = response.status_code
                 print(f"Buyer docs check: {response.status_code}")
             except Exception as e:
@@ -130,7 +128,9 @@ def verify_seller_pricing(workflow_context: dict[str, Any]):
         pytest.skip("No agents to verify pricing")
     # Pricing info may or may not be included in marketplace listing
     # Just verify we have some agents
-    print("Pricing verification: marketplace lists agents (pricing may be endpoint-specific)")
+    print(
+        "Pricing verification: marketplace lists agents (pricing may be endpoint-specific)"
+    )
 
 
 # x402 Payment steps

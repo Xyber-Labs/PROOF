@@ -11,7 +11,7 @@ Tests the agent tools including:
 from __future__ import annotations
 
 import json
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from xy_market.models.execution import ExecutionResult
@@ -108,7 +108,9 @@ async def test_search_sellers_calls_marketplace_client(tools, mock_marketplace_c
 
 async def test_search_sellers_handles_error(tools, mock_marketplace_client):
     """Test that search_sellers handles client errors gracefully."""
-    mock_marketplace_client.list_agents = AsyncMock(side_effect=Exception("Network error"))
+    mock_marketplace_client.list_agents = AsyncMock(
+        side_effect=Exception("Network error")
+    )
 
     result = await tools.search_sellers("Find services", limit=5)
     data = json.loads(result)

@@ -125,7 +125,9 @@ def poll_without_secret(
             pytest.skip("No task_id available")
 
         async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.get(f"{e2e_config.seller_url}/hybrid/tasks/{task_id}")
+            response = await client.get(
+                f"{e2e_config.seller_url}/hybrid/tasks/{task_id}"
+            )
             workflow_context["no_secret_status"] = response.status_code
             print(f"Poll without secret: {response.status_code}")
 
@@ -140,9 +142,13 @@ def verify_auth_error(workflow_context: dict[str, Any]):
     no_secret_status = workflow_context.get("no_secret_status")
 
     if wrong_status and "wrong_secret_verified" not in workflow_context:
-        assert wrong_status in [403, 404], f"Expected 403/404 for wrong secret, got {wrong_status}"
+        assert wrong_status in [403, 404], (
+            f"Expected 403/404 for wrong secret, got {wrong_status}"
+        )
         workflow_context["wrong_secret_verified"] = True
         print("Wrong secret correctly rejected")
     elif no_secret_status:
-        assert no_secret_status in [403, 422], f"Expected 403/422 for missing secret, got {no_secret_status}"
+        assert no_secret_status in [403, 422], (
+            f"Expected 403/422 for missing secret, got {no_secret_status}"
+        )
         print("Missing secret correctly rejected")

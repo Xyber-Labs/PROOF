@@ -79,7 +79,9 @@ async def test_list_registered_agents(rest_client) -> None:
 @pytest.mark.e2e
 async def test_list_agents_with_pagination(rest_client) -> None:
     """Test GET /register/new_entries supports pagination."""
-    response = await rest_client.get("/register/new_entries", params={"limit": 5, "offset": 0})
+    response = await rest_client.get(
+        "/register/new_entries", params={"limit": 5, "offset": 0}
+    )
     assert response.status_code == 200
     agents = response.json()
     assert isinstance(agents, list)
@@ -163,24 +165,33 @@ async def test_register_with_http_url_returns_422(rest_client) -> None:
 async def test_register_with_missing_required_fields_returns_422(rest_client) -> None:
     """Test that registration with missing fields returns validation error."""
     # Missing agent_name
-    response = await rest_client.post("/register", json={
-        "base_url": "https://example.com",
-        "description": "Test",
-    })
+    response = await rest_client.post(
+        "/register",
+        json={
+            "base_url": "https://example.com",
+            "description": "Test",
+        },
+    )
     assert response.status_code == 422
 
     # Missing base_url
-    response = await rest_client.post("/register", json={
-        "agent_name": "Test",
-        "description": "Test",
-    })
+    response = await rest_client.post(
+        "/register",
+        json={
+            "agent_name": "Test",
+            "description": "Test",
+        },
+    )
     assert response.status_code == 422
 
     # Missing description
-    response = await rest_client.post("/register", json={
-        "agent_name": "Test",
-        "base_url": "https://example.com",
-    })
+    response = await rest_client.post(
+        "/register",
+        json={
+            "agent_name": "Test",
+            "base_url": "https://example.com",
+        },
+    )
     assert response.status_code == 422
 
 

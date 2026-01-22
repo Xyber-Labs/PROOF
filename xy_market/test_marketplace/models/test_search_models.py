@@ -1,4 +1,3 @@
-
 import pytest
 
 from xy_market.models.search import SearchRequest, SearchResponse, SellerProfile

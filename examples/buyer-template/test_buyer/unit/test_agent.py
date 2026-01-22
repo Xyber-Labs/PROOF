@@ -8,7 +8,7 @@ Tests the LangGraph-based agent including:
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
@@ -95,7 +95,9 @@ def test_agent_builds_graph(mock_marketplace_client, mock_settings, mock_llm):
 # =============================================================================
 
 
-def test_agent_node_adds_system_prompt(mock_marketplace_client, mock_settings, mock_llm):
+def test_agent_node_adds_system_prompt(
+    mock_marketplace_client, mock_settings, mock_llm
+):
     """Test that agent node adds system prompt on first message."""
     with (
         patch("buyer_example.agent.get_settings", return_value=mock_settings),
@@ -219,7 +221,9 @@ def test_should_continue_returns_end_for_empty_messages(
 # =============================================================================
 
 
-async def test_process_message_returns_result(mock_marketplace_client, mock_settings, mock_llm):
+async def test_process_message_returns_result(
+    mock_marketplace_client, mock_settings, mock_llm
+):
     """Test that process_message returns result dictionary."""
     with (
         patch("buyer_example.agent.get_settings", return_value=mock_settings),

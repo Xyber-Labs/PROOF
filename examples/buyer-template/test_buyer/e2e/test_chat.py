@@ -40,14 +40,14 @@ async def test_chat_endpoint_accepts_message(rest_client) -> None:
     The response depends on marketplace/seller availability.
     """
     config, client = rest_client
-    chat_request = {
-        "message": "Hello, what can you help me with?"
-    }
+    chat_request = {"message": "Hello, what can you help me with?"}
     response = await client.post("/chat", json=chat_request)
 
     # Should either succeed or return a clear error
     # 200 = success, 500/503 = service issues (marketplace/seller not available)
-    assert response.status_code in [200, 500, 503], f"Unexpected status: {response.status_code}"
+    assert response.status_code in [200, 500, 503], (
+        f"Unexpected status: {response.status_code}"
+    )
 
     if response.status_code == 200:
         body = response.json()

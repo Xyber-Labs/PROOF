@@ -6,7 +6,6 @@ LangGraph compatibility and correct state handling.
 
 from __future__ import annotations
 
-import pytest
 from langchain_core.messages import HumanMessage
 
 

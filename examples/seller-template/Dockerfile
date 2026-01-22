@@ -9,18 +9,10 @@ WORKDIR /app
 ENV UV_LINK_MODE=copy
 ENV UV_COMPILE_BYTECODE=1
 
-ARG UV_INDEX_GITLAB_USERNAME=__token__
-ARG UV_INDEX_GITLAB_PASSWORD
-ENV UV_INDEX_GITLAB_USERNAME=${UV_INDEX_GITLAB_USERNAME}
-ENV UV_INDEX_GITLAB_PASSWORD=${UV_INDEX_GITLAB_PASSWORD}
-
-# Copy shared dependency from root context
 COPY xy_market /app/xy_market
 
-# Copy this service from root context
 COPY examples/seller-template /app/examples/seller-template
 
-# Install from service directory (../../xy_market path works!)
 WORKDIR /app/examples/seller-template
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=examples/seller-template/uv.lock,target=uv.lock \

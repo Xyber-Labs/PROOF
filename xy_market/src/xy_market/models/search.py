@@ -1,6 +1,5 @@
 """Search models for marketplace integration."""
 
-
 from pydantic import BaseModel, Field, field_validator
 
 from xy_market.utils.validation import validate_uuid

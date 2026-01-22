@@ -18,7 +18,6 @@ import pytest
 from seller_template.config import MarketplaceRegistrationSettings
 from seller_template.registration import RegistrationService
 
-
 # =============================================================================
 # Fixtures
 # =============================================================================
@@ -292,7 +291,9 @@ async def test_register_exhausts_retries(registration_settings):
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
-        mock_client.post = AsyncMock(side_effect=httpx.RequestError("Connection failed"))
+        mock_client.post = AsyncMock(
+            side_effect=httpx.RequestError("Connection failed")
+        )
         mock_client.__aenter__ = AsyncMock(return_value=mock_client)
         mock_client.__aexit__ = AsyncMock(return_value=None)
         mock_client_class.return_value = mock_client

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 import pytest_asyncio
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
 from mcp_server_weather.dependencies import get_weather_client

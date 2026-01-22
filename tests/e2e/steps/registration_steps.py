@@ -41,7 +41,9 @@ def register_seller(
         ) as client:
             try:
                 response = await client.post("/register", json=seller_profile)
-                assert response.status_code in [200, 409], f"Registration failed: {response.status_code}"
+                assert response.status_code in [200, 409], (
+                    f"Registration failed: {response.status_code}"
+                )
                 print(f"Seller registered: status={response.status_code}")
             except Exception as e:
                 pytest.skip(f"Failed to register seller: {e}")

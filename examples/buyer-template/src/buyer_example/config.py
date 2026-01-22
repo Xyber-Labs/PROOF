@@ -18,9 +18,7 @@ class Settings(BaseSettings):
     port: int = 8003
 
     # MarketplaceBK Configuration
-    marketplace_base_url: str = (
-        "http://marketplace:8000"  # Default for docker-compose
-    )
+    marketplace_base_url: str = "http://marketplace:8000"  # Default for docker-compose
     marketplace_timeout_seconds: int = 30
 
     # Budget Configuration

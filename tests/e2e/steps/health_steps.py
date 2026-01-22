@@ -45,7 +45,9 @@ def check_all_services_healthy(e2e_config: E2ETestConfig):
 
 
 @given("the Marketplace service is running")
-def check_marketplace_running(e2e_config: E2ETestConfig, workflow_context: dict[str, Any]):
+def check_marketplace_running(
+    e2e_config: E2ETestConfig, workflow_context: dict[str, Any]
+):
     """Verify Marketplace is running."""
 
     async def _check():
@@ -81,7 +83,9 @@ def check_seller_running(e2e_config: E2ETestConfig, workflow_context: dict[str, 
 
 
 @given("the MCP Server service is running")
-def check_mcp_server_running(e2e_config: E2ETestConfig, workflow_context: dict[str, Any]):
+def check_mcp_server_running(
+    e2e_config: E2ETestConfig, workflow_context: dict[str, Any]
+):
     """Verify MCP Server is running."""
 
     async def _check():
@@ -118,7 +122,9 @@ def check_buyer_running(e2e_config: E2ETestConfig, workflow_context: dict[str, A
 @then("all services should respond to health checks")
 def verify_all_services_healthy(workflow_context: dict[str, Any]):
     """Verify all service health checks passed."""
-    assert workflow_context.get("marketplace_healthy"), "Marketplace health check failed"
+    assert workflow_context.get("marketplace_healthy"), (
+        "Marketplace health check failed"
+    )
     assert workflow_context.get("seller_healthy"), "Seller health check failed"
     assert workflow_context.get("mcp_server_healthy"), "MCP Server health check failed"
     assert workflow_context.get("buyer_healthy"), "Buyer health check failed"

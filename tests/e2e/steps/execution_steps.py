@@ -41,8 +41,12 @@ def execute_task_with_seller(
 
         async with httpx.AsyncClient(timeout=60.0) as client:
             try:
-                response = await client.post(f"{seller_url}/hybrid/execute", json=execution_request)
-                assert response.status_code in [202, 402], f"Unexpected status: {response.status_code}"
+                response = await client.post(
+                    f"{seller_url}/hybrid/execute", json=execution_request
+                )
+                assert response.status_code in [202, 402], (
+                    f"Unexpected status: {response.status_code}"
+                )
 
                 if response.status_code == 402:
                     print("Payment required (402 received)")
@@ -56,8 +60,12 @@ def execute_task_with_seller(
                     assert "buyer_secret" in execution_data
                     workflow_context["execution_data"] = execution_data
                     workflow_context["exec_task_id"] = execution_data["task_id"]
-                    workflow_context["exec_buyer_secret"] = execution_data["buyer_secret"]
-                    print(f"Task execution initiated: task_id={execution_data['task_id']}")
+                    workflow_context["exec_buyer_secret"] = execution_data[
+                        "buyer_secret"
+                    ]
+                    print(
+                        f"Task execution initiated: task_id={execution_data['task_id']}"
+                    )
 
             except Exception as e:
                 pytest.skip(f"Execution failed: {e}")
@@ -118,13 +126,19 @@ def verify_execution_result(workflow_context: dict[str, Any]):
 
     if execution_data.get("status") == "payment_required":
         data = execution_data.get("data", {})
-        assert "error_code" in data or "accepts" in data, "Invalid payment required response"
+        assert "error_code" in data or "accepts" in data, (
+            "Invalid payment required response"
+        )
         print("Execution requires payment (402)")
     else:
         status = execution_data.get("status")
-        assert status in ["done", "failed", "in_progress"], f"Unexpected status: {status}"
+        assert status in ["done", "failed", "in_progress"], (
+            f"Unexpected status: {status}"
+        )
         if status == "done":
-            print(f"Execution succeeded: {str(execution_data.get('data', execution_data.get('result')))[:200]}...")
+            print(
+                f"Execution succeeded: {str(execution_data.get('data', execution_data.get('result')))[:200]}..."
+            )
         elif status == "failed":
             print("Execution failed (expected for some scenarios)")
         else:
@@ -143,7 +157,9 @@ def buyer_discover_sellers(
             response = await client.get(
                 f"{e2e_config.marketplace_url}/register/new_entries"
             )
-            assert response.status_code == 200, f"Marketplace query failed: {response.status_code}"
+            assert response.status_code == 200, (
+                f"Marketplace query failed: {response.status_code}"
+            )
             agents = response.json()
             if agents:
                 workflow_context["found_seller"] = agents[0]

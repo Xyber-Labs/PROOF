@@ -10,17 +10,17 @@ from collections.abc import Callable
 from contextlib import asynccontextmanager
 
 import httpx
+from eth_account import Account
+from fastapi import FastAPI
+from fastmcp import FastMCP
+from x402.clients.httpx import x402HttpxClient
+from xy_market.middleware.ratelimit import RateLimitMiddleware
 from xy_market.vendor.mcp_client import (
     McpClient,
     McpClientConfig,
     get_mcp_client,
     get_mcp_client_config,
 )
-from eth_account import Account
-from fastapi import FastAPI
-from fastmcp import FastMCP
-from x402.clients.httpx import x402HttpxClient
-from xy_market.middleware.ratelimit import RateLimitMiddleware
 
 from seller_template.api_routers import routers as api_routers
 from seller_template.config import (

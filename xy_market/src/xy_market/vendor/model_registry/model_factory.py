@@ -17,42 +17,43 @@ logger = logging.getLogger(__name__)
 def get_model(model: SupportedModels, **model_kwargs) -> BaseLLM:
     """
     Creates and returns an LLM instance for the given model and configuration.
-    
+
     Args:
         model: The selected model from SupportedModels (e.g., SupportedModels.GEMINI_2_0_FLASH)
         **model_kwargs: Keyword arguments specific to the model's configuration.
             - For Google models: `google_api_key` (str) - Required if not set via GOOGLE_API_KEY env var
             - For Together AI models: `together_api_key` (str) - Required if not set via TOGETHER_API_KEY env var
-    
+
     Returns:
         An instance of the selected BaseChatModel.
-    
+
     Raises:
         ValueError: If model initialization fails (e.g., missing API key, invalid kwargs)
-    
+
     Environment Variables:
         GOOGLE_API_KEY: Single Google API key (used by LangChain if google_api_key not in kwargs)
         TOGETHER_API_KEY: Single Together API key (used by LangChain if together_api_key not in kwargs)
-        
+
         Note: You can also use ModelConfig with GOOGLE_API_KEYS/TOGETHER_API_KEYS (JSON arrays)
         and pass keys explicitly: get_model(..., google_api_key=config.google_api_keys[0])
-    
+
     Examples:
         ```python
         from xy_market.vendor.model_registry import get_model, SupportedModels, ModelConfig
-        
+
         # Option 1: Pass API key directly
         llm = get_model(SupportedModels.GEMINI_2_0_FLASH, google_api_key="your-key-here")
-        
+
         # Option 2: Rely on GOOGLE_API_KEY environment variable (LangChain will use it)
         # Set: export GOOGLE_API_KEY="your-key-here"
         llm = get_model(SupportedModels.GEMINI_2_0_FLASH)
-        
+
         # Option 3: Use ModelConfig (access some key from list)
         config = ModelConfig()
         if config.google_api_keys:
             llm = get_model(SupportedModels.GEMINI_2_0_FLASH, google_api_key=config.google_api_keys[0])
         ```
+
     """
     try:
         llm_model = model.model_provider(model=model.model_name, **model_kwargs)
@@ -92,8 +93,8 @@ def get_multiple_model_instances(
             together_api_keys=["8e14f765"]
         )
         # Returns: [GEMINI_2_0_FLASH with key Bsg4, GEMINI_2_0_FLASH with key I0qE, META_LLAMA_3_3_70B with key 8e14f765]
-    """
 
+    """
     if not google_api_keys and not together_api_keys:
         config = ModelConfig()
         google_api_keys = config.google_api_keys

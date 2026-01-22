@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable
+from collections.abc import Callable
 
 import httpx
 from langchain_core.tools import StructuredTool
@@ -38,7 +38,8 @@ class McpClient:
         config: McpClientConfig,
         httpx_client_factory: Callable[..., httpx.AsyncClient] | None = None,
     ) -> McpClient:
-        """Create a new McpClient instance from configuration.
+        """
+        Create a new McpClient instance from configuration.
 
         Args:
             config: The MCP client configuration.
@@ -47,14 +48,17 @@ class McpClient:
 
         Returns:
             McpClient: A new instance of the MCP client.
+
         """
         return cls(config=config, httpx_client_factory=httpx_client_factory)
 
     def _initialize_mcp_client(self) -> MultiServerMCPClient:
-        """Initialize the MultiServerMCPClient with the configuration from McpClientConfig.
+        """
+        Initialize the MultiServerMCPClient with the configuration from McpClientConfig.
 
         Returns:
             MultiServerMCPClient: Initialized client instance.
+
         """
         server_configs: dict[str, Connection] = {}
 
@@ -62,23 +66,27 @@ class McpClient:
             server_configs[server_name] = {
                 "url": server_config.url,
                 "transport": server_config.transport,
-            }        
-            if (
-                self.httpx_client_factory
-                and server_config.transport in ("sse", "streamable_http")
+            }
+            if self.httpx_client_factory and server_config.transport in (
+                "sse",
+                "streamable_http",
             ):
-                server_configs[server_name]["httpx_client_factory"] = self.httpx_client_factory
+                server_configs[server_name]["httpx_client_factory"] = (
+                    self.httpx_client_factory
+                )
 
         return MultiServerMCPClient(server_configs)
 
     def _validate_server_name(self, server_name: str) -> None:
-        """Validate server name exists in configuration.
+        """
+        Validate server name exists in configuration.
 
         Args:
             server_name (str): The server name to validate.
 
         Raises:
             McpConfigError: If server name is not found in configuration.
+
         """
         if server_name not in self.config.servers:
             error_msg = f"McpServerConfig for server {server_name} not found. Check your MCP_SERVERS environment variables"
@@ -86,7 +94,8 @@ class McpClient:
             raise McpConfigError(error_msg)
 
     async def _load_tools_from_server(self, server_name: str) -> None:
-        """Load tools from a specific MCP server. As the result, StructuredTool objects are stored in self.tools[server_name] dictionary,
+        """
+        Load tools from a specific MCP server. As the result, StructuredTool objects are stored in self.tools[server_name] dictionary,
            with server_name as the key
 
         Args:
@@ -95,8 +104,8 @@ class McpClient:
         Raises:
             McpConfigError: If the MCP server config is not found.
             McpServerConnectionError: If the MCP server connection fails.
-        """
 
+        """
         server_config: McpServerConfig = self.config.servers[server_name]
         logger.debug(
             f"Loading tools from MCP server {server_config.url}",
@@ -127,7 +136,8 @@ class McpClient:
             ) from e
 
     async def get_tool(self, server_name: str, tool_name: str) -> StructuredTool:
-        """Get a specific tool from a specific MCP server.
+        """
+        Get a specific tool from a specific MCP server.
 
         Args:
             server_name (str): The name of the MCP server to get the tool from.
@@ -140,6 +150,7 @@ class McpClient:
             McpConfigError: If the MCP server config is not found.
             McpServerConnectionError: If the MCP server connection fails.
             UnknownToolError: If the requested tool is not found.
+
         """
         self._validate_server_name(server_name)
 
@@ -164,12 +175,14 @@ class McpClient:
         return self.tools[server_name][tool_name]
 
     async def get_all_tools(self) -> list[StructuredTool]:
-        """Get all tools from all connected MCP servers.
+        """
+        Get all tools from all connected MCP servers.
 
         This method lazily loads tools from servers that haven't been connected to yet.
 
         Returns:
             list[StructuredTool]: A list of all available tools from all servers.
+
         """
         for server_name in self.config.servers.keys():
             if not self.tools[server_name]:
@@ -182,7 +195,8 @@ class McpClient:
         ]
 
     async def get_all_tools_from_server(self, server_name: str) -> list[StructuredTool]:
-        """Get all tools from a specific MCP server.
+        """
+        Get all tools from a specific MCP server.
 
         This method lazily loads tools if they haven't been loaded yet.
 
@@ -195,6 +209,7 @@ class McpClient:
         Raises:
             McpConfigError: If the MCP server config is not found.
             McpServerConnectionError: If the MCP server connection fails.
+
         """
         self._validate_server_name(server_name)
 
@@ -206,15 +221,16 @@ class McpClient:
 
 def get_mcp_client_config() -> McpClientConfig:
     """Returns a new instance of McpClientConfig."""
-
     config = McpClientConfig()
     return config
+
 
 def get_mcp_client(
     config: McpClientConfig,
     httpx_client_factory: Callable[..., httpx.AsyncClient] | None = None,
 ) -> McpClient:
-    """Returns a new instance of McpClient.
+    """
+    Returns a new instance of McpClient.
 
     For creating clients, prefer using McpClient.from_config() directly.
 
@@ -225,5 +241,8 @@ def get_mcp_client(
 
     Returns:
         McpClient: A new instance of the MCP client.
+
     """
-    return McpClient.from_config(config=config, httpx_client_factory=httpx_client_factory)
+    return McpClient.from_config(
+        config=config, httpx_client_factory=httpx_client_factory
+    )

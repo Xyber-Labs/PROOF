@@ -30,9 +30,7 @@ def check_seller_health(
     async def _check():
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
-                response = await client.get(
-                    f"{e2e_config.seller_url}/api/health"
-                )
+                response = await client.get(f"{e2e_config.seller_url}/api/health")
                 workflow_context["seller_health_status"] = response.status_code
                 print(f"Seller health check: {response.status_code}")
             except Exception as e:
@@ -247,7 +245,9 @@ def verify_seller_discoverable(
             response = await client.get(
                 f"{e2e_config.marketplace_url}/register/new_entries"
             )
-            assert response.status_code == 200, f"Failed to list agents: {response.status_code}"
+            assert response.status_code == 200, (
+                f"Failed to list agents: {response.status_code}"
+            )
             agents = response.json()
             assert isinstance(agents, list), "Expected list of agents"
             # At least one agent should be registered
@@ -295,7 +295,7 @@ def request_seller_tools(
                 assert response.status_code == 200
                 schema = response.json()
                 workflow_context["seller_tools_response"] = schema.get("paths", {})
-                print(f"Seller endpoints retrieved from OpenAPI")
+                print("Seller endpoints retrieved from OpenAPI")
 
     asyncio.run(_check())
 
@@ -317,7 +317,9 @@ def verify_weather_tools(workflow_context: dict[str, Any]):
     # This is optional - weather tools may not be connected to seller
     # Just verify we have some tools/endpoints
     assert tools is not None, "No tools response"
-    print("Tool list verified (weather tools availability depends on MCP server connection)")
+    print(
+        "Tool list verified (weather tools availability depends on MCP server connection)"
+    )
 
 
 @given("the seller has paid endpoints")
@@ -347,7 +349,9 @@ def verify_seller_has_paid_endpoints(
                         has_paid_endpoint = True
                         workflow_context["paid_endpoint"] = endpoint
                         workflow_context["paid_endpoint_price"] = price_info
-                        print(f"Found paid endpoint: {endpoint} with price {price_info.get('token_amount')}")
+                        print(
+                            f"Found paid endpoint: {endpoint} with price {price_info.get('token_amount')}"
+                        )
                         break
                 if has_paid_endpoint:
                     break

@@ -119,6 +119,7 @@ class WeatherClient:
 
         Raises:
             WeatherClientError: If no API key is available from either source
+
         """
         key = api_key or self.config.api_key
         if not key:

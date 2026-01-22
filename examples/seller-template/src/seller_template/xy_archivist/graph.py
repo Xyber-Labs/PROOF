@@ -1,14 +1,14 @@
 import logging
 from typing import Annotated
 
-from xy_market.vendor.model_registry.chat_models import SupportedModels
-from xy_market.vendor.model_registry.config import ModelConfig
-from xy_market.vendor.model_registry.model_factory import get_model
 from langchain_core.messages import BaseMessage
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 from pydantic import BaseModel
+from xy_market.vendor.model_registry.chat_models import SupportedModels
+from xy_market.vendor.model_registry.config import ModelConfig
+from xy_market.vendor.model_registry.model_factory import get_model
 
 from seller_template.dependencies import DependencyContainer
 
@@ -66,6 +66,7 @@ class ArchivistGraphBuilder:
                 "No tools available for agent. Configure MCP_SERVERS__* environment variables. "
                 "Agent will start but task execution will be limited."
             )
+
             # Return a minimal agent that can respond but has no tools
             def no_tools_chatbot(state: AgentState):
                 return {"messages": [llm.invoke(state.messages)]}
