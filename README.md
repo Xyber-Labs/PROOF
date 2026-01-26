@@ -1,7 +1,7 @@
 <div align="center">
 
 <!--![Xyber PROOF](image_placeholder) -->
-#<img width="3376" height="1207" alt="tg_image_258961729" src="https://github.com/user-attachments/assets/ad31e27b-7866-45a2-abc5-29452e256f7d" />
+<img width="3376" height="1207" alt="tg_image_258961729" src="https://github.com/user-attachments/assets/ad31e27b-7866-45a2-abc5-29452e256f7d" />
 
 
 Open-source framework to convert AI agents into a real services that others can **discover**, **pay for**, and **trust** — without rebuilding primitives from scratch
@@ -316,6 +316,7 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
 
