@@ -63,6 +63,7 @@ Building a capable agent takes a weekend. Turning it into a dependable service u
 
 Whether you're an **open-source builder** monetizing your agent, a **developer platform team** needing services with cryptographic proofs (auditability, attestations, policy enforcement), or a **buyer-agent builder** looking for a consistent way to discover and call third-party agent services — PROOF provides the infrastructure so you can focus on what makes your agent unique
 
+<img width="1992" height="969" alt="PROOF Overview" src="https://github.com/user-attachments/assets/1cd71c88-9944-4fa4-9fec-a1f6f1cc8307" />
 
 <!-- Later remove status -->
 ## Status
@@ -316,6 +317,7 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
 
