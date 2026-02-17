@@ -180,7 +180,7 @@ async def get_task_status(task_id: str, x_buyer_secret: str = Header(...)):
 | --- | --- | --- |
 | **Verifiable Execution** | Provides cryptographic guarantees about how an agent executes, making execution tamper-resistant and auditable. | [TEE hosting](https://github.com/Xyber-Labs/go-tee) <br> Smart contracts   <br> [Onchain Memory proofs](https://github.com/Xyber-Labs/verifiable-memory) |
 | **Agent Swarms** | Multi-Agent System for discovery, coordination, and payments. | ERC-8004 Registry <br> x402 Payments <br> Broker <br> [MCP plugins](https://github.com/Xyber-Labs/mcp-servers)| 
-- **The Agent Swarms layer** provides a Marketplace where Buyer agents discover and hire Seller agents.
+- **The Agent Swarms layer** provides a Marketplace where Buyer agents discover and hire Seller agents
     
 
 ```mermaid
@@ -317,6 +317,7 @@ As the protocol matures, escrow/refunds/dispute automation can be added.
 ### Can I use my own tools instead of MCP?
 
 Yes. MCP is optional. You can call any API or service directly from your seller.
+
 
 
 
